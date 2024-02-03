@@ -31,15 +31,27 @@ L'objectif de ce projet est la conception d'une **application web**, permettant 
 
 ## Description des dossiers de ce dépôt
 
-- 
-- 
-- 
+- notebooks
+- backend-fastapi
+- frontend-streamlit
+- documentation
+  - rapport
+  - presentation
 
-## Notebooks
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
+
+### Notebooks
 
 - **Notebook 1** : Téléchargement des vidéos aériennes de bateaux [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Yx053xJrMfcenIW45f8v8zPoFTJsgiMc)
 
-[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
+- **Notebook 2** : [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ZP6E8BIO1QXTTzsHtAj1kscZCsqVs0RL?usp=sharing)
+
+
+### Serveur de tracking MLflow
+
+### Back-end : Fast-API
+
+### Front-end : Streamlit
 
 ## Gestion de projet 
 
