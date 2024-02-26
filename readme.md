@@ -15,19 +15,28 @@ Mon projet se concentre sur la **détection de bateaux à partir de vues aérien
 - Mesurer la vitesse d'un bateau
 - Contrôle de la taille des bateaux, limite de taille
 
-## Objectif
-
-L'objectif de ce projet est la conception d'une **application web**, permettant aux utilisateurs d'importer une image ou une vidéo. L'application réalise la détection d'objets sur le fichier fourni et retourne le même fichier annoté avec :
-
-- les boîtes de délimitation entourant les objets détectés
-- les étiquettes de classe
-- les scores de confiance associés.
-
 ## Livrables
 
 - La **réalisation d'un projet chef d'œuvre**.
 - Un **rapport** qui reprend les différentes étapes de conception et de production du projet.
 - Une **présentation** du projet, incluant une démonstration.
+
+## Application web
+
+L'objectif de ce projet est la conception d'une **application web**, permettant aux utilisateurs d'importer une image ou une vidéo. L'application réalise la détection d'objets sur le fichier fourni et retourne le résultat annoté, accompagné de :
+
+- les boîtes de délimitation entourant les objets détectés
+- les étiquettes de classe
+- les scores de confiance associés.
+
+<img src="https://user-images.githubusercontent.com/7164864/217935870-c0bc60a3-6fc0-4047-b011-7b4c59488c91.png" alt="Streamlit logo" style="margin-top:20px"></img>
+
+L'application est développée à l'aide du framework front-end python : [Streamlit](https://streamlit.io/). Les avantages de Streamlit sont :
+
+- Simple et tout en python
+- Prototypage rapide et interactif
+- Rafraîchissement automatique
+- Open-source et gratuit
 
 ## Développement du modèle de détection et de suivi
 
