@@ -1,4 +1,4 @@
-# from ultralytics import YOLO
+from ultralytics import YOLO
 import time
 import streamlit as st
 import cv2
