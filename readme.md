@@ -29,29 +29,13 @@ L'objectif de ce projet est la conception d'une **application web**, permettant 
 - Un **rapport** qui reprend les différentes étapes de conception et de production du projet.
 - Une **présentation** du projet, incluant une démonstration.
 
-## Description des dossiers de ce dépôt
+## Développement du modèle de détection et de suivi d'objet
 
-- notebooks
-- backend-fastapi
-- frontend-streamlit
-- documentation
-  - rapport
-  - presentation
-
-[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
-
-### Notebooks
-
-- **Notebook 1** : Téléchargement des vidéos aériennes de bateaux [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Yx053xJrMfcenIW45f8v8zPoFTJsgiMc)
-
-- **Notebook 2** : [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ZP6E8BIO1QXTTzsHtAj1kscZCsqVs0RL?usp=sharing)
-
-
-### Serveur de tracking MLflow
-
-### Back-end : Fast-API
-
-### Front-end : Streamlit
+| Titre  | Notebook  |
+|---|---|
+| 🏷️ Annotations automatiques avec un modèle de base (Base model) | [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Yx053xJrMfcenIW45f8v8zPoFTJsgiMc) |
+| 🗃️ Sauvegarde des données d'entraînement dans la base de donnée analytique | [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ZP6E8BIO1QXTTzsHtAj1kscZCsqVs0RL?usp=sharing) |
+| 🚂 Entraînement du modèle cible YOLOv8 (Target model) | [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ZP6E8BIO1QXTTzsHtAj1kscZCsqVs0RL?usp=sharing) |
 
 ## Gestion de projet 
 
