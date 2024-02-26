@@ -29,7 +29,48 @@ L'objectif de ce projet est la conception d'une **application web**, permettant 
 - Un **rapport** qui reprend les différentes étapes de conception et de production du projet.
 - Une **présentation** du projet, incluant une démonstration.
 
-## Développement du modèle de détection et de suivi d'objet
+## Développement du modèle de détection et de suivi
+
+> **Objectif :** Créer un modèle distillé pour la détection et le suivi de bateaux à partir d'images aériennes non étiquetées.
+
+### Processus
+
+1. **Auto-étiquetage des images:**
+    - Utiliser le modèle de base [GroundedSAM](https://github.com/IDEA-Research/Grounded-Segment-Anything) avec [Autodistill](https://docs.autodistill.com/) pour annoter automatiquement les images aériennes avec une ontologie définie.
+    - L'ontologie définit le type d'objets à détecter (bateaux) et comment le modèle de base est "prompté".
+
+2. **Entraînement du modèle cible:**
+    - Utiliser les images annotées automatiquement pour entraîner un modèle cible [Yolov8](https://docs.ultralytics.com/fr).
+    - Le modèle cible est optimisé pour la détection précise de bateaux dans les images aériennes.
+
+### Avantages
+
+- Réduction du temps d'étiquetage manuel des données.
+- Prototypage rapide et évaluation de la faisabilité de l'application.
+- Modèle distillé précis et performant pour la détection de bateaux.
+
+### Points clés
+
+- **Ontologie:** Définit la structure et le contenu des annotations automatiques.
+- **Modèle de base:** GroundedSAM avec Autodistill pour l'étiquetage automatique.
+- **Modèle cible:** YOLOv8 pour la détection précise de bateaux.
+
+### Ressources supplémentaires
+
+- [https://github.com/autodistill/autodistill-grounded-sam](https://github.com/autodistill/autodistill-grounded-sam)
+- [https://docs.autodistill.com/base_models/groundedsam/](https://docs.autodistill.com/base_models/groundedsam/)
+- [https://docs.ultralytics.com/fr](https://docs.ultralytics.com/fr)
+- [https://roboflow.com/train/grounded-sam-and-detr](https://roboflow.com/train/grounded-sam-and-detr)
+
+### Remarques:
+
+- Cette approche est un exemple d'application de la distillation de modèle pour la vision par ordinateur.
+- D'autres modèles de base et cibles peuvent être utilisés en fonction des besoins spécifiques.
+- L'ontologie est un élément crucial pour la précision et l'efficacité du processus.
+
+### Notebooks
+
+L'ensemble du processus de développement du modèle est disponible dans les notebooks suivants : 
 
 | Titre  | Notebook  |
 |---|---|
