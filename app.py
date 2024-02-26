@@ -5,9 +5,11 @@ import PIL
 # External packages
 import streamlit as st
 
-# Local Modules
+# # Local Modules
 import settings
 import helper
+
+
 
 # Setting page layout
 st.set_page_config(

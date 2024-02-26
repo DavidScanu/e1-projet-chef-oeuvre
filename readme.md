@@ -37,6 +37,16 @@ L'objectif de ce projet est la conception d'une **application web**, permettant 
 | 🗃️ Sauvegarde des données d'entraînement dans la base de donnée analytique | [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ZP6E8BIO1QXTTzsHtAj1kscZCsqVs0RL?usp=sharing) |
 | 🚂 Entraînement du modèle cible YOLOv8 (Target model) | [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ZP6E8BIO1QXTTzsHtAj1kscZCsqVs0RL?usp=sharing) |
 
+## Développement de l'application web
+
+Développement d'une application wbe avec le framework [Streamlit](https://streamlit.io/). Application qui réalise les détections et suivis d'objets à partir d'images, de vidéos ou d'URL YouTube. 
+
+### Problèmes rencontrés 
+
+| | Titre  | Solution  | URL |
+|---|---|---|---|
+| 1 | Problème d'importation d'Ultralytics au lancement de Streamlit (`streamlit run app.py`) dans un Codespace GitHub | `apt install libgl1-mesa-glx` | [Lien](https://stackoverflow.com/questions/55313610/importerror-libgl-so-1-cannot-open-shared-object-file-no-such-file-or-directo) |
+
 ## Gestion de projet 
 
 [GitHub Project](https://github.com/users/DavidScanu/projects/3) utilisé pour la gestion de ce projet.
