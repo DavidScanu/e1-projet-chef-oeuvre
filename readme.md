@@ -2,7 +2,7 @@
 
 Ce projet chef-d'œuvre témoigne de la maîtrise des compétences visées pour l'obtention du titre professionnel : [Développeur en intelligence artificielle (RNCP 34757)](https://www.francecompetences.fr/recherche/rncp/34757/), délivré par [Simplon](https://simplon.co/), dans le cadre de l'[École Microsoft IA Caen par Simplon et ISEN](https://isen-caen.fr/ecole-ia-microsoft-by-simplon-et-isen-ouest/). Ce projet chef d'œuvre comprend la conception d'un programme d'intelligence artificielle complet et la réalisation d’une application qui met à disposition ce programme.
 
-## Résumé
+## 🛳️ Résumé
 
 Mon projet se concentre sur la **détection de bateaux à partir de vues aériennes**. L'objectif principal est d'implémenter des algorithmes de détection d'objets et de suivi d'objets pour identifier et suivre les bateaux dans une scène. Une application potentielle de ce système serait la mesure du nombre de passages de bateaux par heure dans un canal ou une zone spécifique, fournissant ainsi des informations utiles pour la gestion du trafic maritime.
 
@@ -15,19 +15,33 @@ Mon projet se concentre sur la **détection de bateaux à partir de vues aérien
 - Mesurer la vitesse d'un bateau
 - Contrôle de la taille des bateaux, limite de taille
 
-## Livrables
+## 📦 Livrables
 
 - La **réalisation d'un projet chef d'œuvre**.
 - Un **rapport** qui reprend les différentes étapes de conception et de production du projet.
 - Une **présentation** du projet, incluant une démonstration.
 
-## Application web
+## 💻 Application web
 
-L'objectif de ce projet est la conception d'une **application web**, permettant aux utilisateurs d'importer une image ou une vidéo. L'application réalise la détection d'objets sur le fichier fourni et retourne le résultat annoté, accompagné de :
+L'application réalise la détection et le suivi d'objets à partir d'images, de vidéos ou d'URL YouTube. 
 
-- les boîtes de délimitation entourant les objets détectés
-- les étiquettes de classe
-- les scores de confiance associés.
+### Fonctionnalités
+
+- Téléchargez une image, une vidéo ou insérez une URL YouTube.
+- Notre application web performante effectue la détection et le suivi d'objets en temps réel.
+- Visualisez les résultats annotés directement sur votre navigateur.
+- Chaque objet détecté est entouré d'une boîte de délimitation.
+- Accédez aux étiquettes de classe et aux scores de confiance pour une analyse précise.
+
+### Démarrez en quelques clics :
+
+- Ouvrez l'application web dans votre navigateur.
+- Importez votre fichier ou insérez une URL YouTube.
+- Laissez l'application opérer sa magie !
+- Explorez les résultats annotés et obtenez des informations détaillées sur chaque objet détecté.
+- Simple, efficace et précise, notre application web est l'outil idéal pour vos besoins de détection et de suivi d'objets.
+
+### Streamlit 
 
 <img src="https://user-images.githubusercontent.com/7164864/217935870-c0bc60a3-6fc0-4047-b011-7b4c59488c91.png" alt="Streamlit logo" style="margin-top:20px"></img>
 
@@ -38,7 +52,13 @@ L'application est développée à l'aide du framework front-end python : [Stream
 - Rafraîchissement automatique
 - Open-source et gratuit
 
-## Développement du modèle de détection et de suivi
+### Problèmes rencontrés 
+
+| | Titre  | Solution  | URL |
+|---|---|---|---|
+| 1 | Problème d'importation d'Ultralytics au lancement de Streamlit (`streamlit run app.py`) dans un Codespace GitHub | `apt install libgl1-mesa-glx` | [Lien](https://stackoverflow.com/questions/55313610/importerror-libgl-so-1-cannot-open-shared-object-file-no-such-file-or-directo) |
+
+## 🤖 Développement du modèle de détection et de suivi
 
 > **Objectif :** Créer un modèle distillé pour la détection et le suivi de bateaux à partir d'images aériennes non étiquetées.
 
@@ -87,21 +107,11 @@ L'ensemble du processus de développement du modèle est disponible dans les not
 | 🗃️ Sauvegarde des données d'entraînement dans la base de donnée analytique | [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ZP6E8BIO1QXTTzsHtAj1kscZCsqVs0RL?usp=sharing) |
 | 🚂 Entraînement du modèle cible YOLOv8 (Target model) | [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ZP6E8BIO1QXTTzsHtAj1kscZCsqVs0RL?usp=sharing) |
 
-## Développement de l'application web
-
-Développement d'une application wbe avec le framework [Streamlit](https://streamlit.io/). Application qui réalise les détections et suivis d'objets à partir d'images, de vidéos ou d'URL YouTube. 
-
-### Problèmes rencontrés 
-
-| | Titre  | Solution  | URL |
-|---|---|---|---|
-| 1 | Problème d'importation d'Ultralytics au lancement de Streamlit (`streamlit run app.py`) dans un Codespace GitHub | `apt install libgl1-mesa-glx` | [Lien](https://stackoverflow.com/questions/55313610/importerror-libgl-so-1-cannot-open-shared-object-file-no-such-file-or-directo) |
-
-## Gestion de projet 
+## 📅 Gestion de projet 
 
 [GitHub Project](https://github.com/users/DavidScanu/projects/3) utilisé pour la gestion de ce projet.
 
-## A propos 
+## 👀 A propos 
 
 Projet développé par **David Scanu**, étudiant en intelligence artificielle 🤖 à l'**École Microsoft IA par Simplon et ISEN**, 1ère promotion de Caen (2023-2024).
 
