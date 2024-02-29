@@ -11,46 +11,35 @@ Mon projet se concentre sur la **détection de bateaux à partir de vues aérien
 
 ### Usages possibles
 
-- Nombre de passages de bateaux par heure dans un canal ou une zone donnée
-- Mesurer la vitesse d'un bateau
-- Contrôle de la taille des bateaux, limite de taille
+Voici quelques usages possibles pour l'application de détection et de suivi de bateaux depuis des vues aériennes :
+
+- **Surveillance du trafic maritime** : Déterminer le nombre de passages de bateaux par heure dans un canal ou une zone spécifique, ce qui permet de surveiller l'activité maritime et d'analyser les tendances de trafic.
+- **Mesure de la vitesse des bateaux** : Mesurer la vitesse des bateaux en mouvement, offrant ainsi des données précieuses pour la navigation et le contrôle de la vitesse dans certaines zones maritimes.
+- **Contrôle de la taille des bateaux** : Surveiller et contrôler les dimensions des bateaux pour s'assurer qu'ils respectent les limites de taille établies dans certaines zones maritimes ou canaux.
 
 ## 📦 Livrables
 
-- La **réalisation d'un projet chef d'œuvre**.
 - Un **rapport** qui reprend les différentes étapes de conception et de production du projet.
 - Une **présentation** du projet, incluant une démonstration.
+- Une **application web** fonctionnelle disponible à l’URL : [url]
+- Le **code de l’application web** disponible dans ce dépôt GitHub
+- Les **notebooks** de conception du modèle de vision par ordinateur
+- La **page de gestion de projet** [GitHub Projects](https://github.com/users/DavidScanu/projects/3)
 
-## 💻 Application web
 
-L'application réalise la détection et le suivi d'objets à partir d'images, de vidéos ou d'URL YouTube. 
+## Application web 
 
-### Fonctionnalités
+L'application web de détection propose **la détection d’objets et le suivi d’instances à partir d'images, de vidéos ou d'URL YouTube**. Ses fonctionnalités principales comprennent :
 
-- Téléchargez une image, une vidéo ou insérez une URL YouTube.
-- Notre application web performante effectue la détection et le suivi d'objets en temps réel.
-- Visualisez les résultats annotés directement sur votre navigateur.
-- Chaque objet détecté est entouré d'une boîte de délimitation.
-- Accédez aux étiquettes de classe et aux scores de confiance pour une analyse précise.
-
-### Démarrez en quelques clics :
-
-- Ouvrez l'application web dans votre navigateur.
-- Importez votre fichier ou insérez une URL YouTube.
-- Laissez l'application opérer sa magie !
-- Explorez les résultats annotés et obtenez des informations détaillées sur chaque objet détecté.
-- Simple, efficace et précise, notre application web est l'outil idéal pour vos besoins de détection et de suivi d'objets.
-
-### Streamlit 
+- **Importation** d'images, de vidéos ou d'URL YouTube.
+- **Détection** et suivi d'objets en temps réel grâce à une interface web performante.
+- **Annotation** des résultats directement sur le navigateur, avec chaque objet entouré d'une boîte de délimitation.
+- **Utilisation simple** : il suffit d'ouvrir l'application dans le navigateur, d'importer le fichier ou d'insérer l'URL YouTube, et de laisser l'application travailler.
+- **Exploration des résultats** : Consultation des annotations (labels de classe, coordonnées des boîtes de détection et score de confiance) pour obtenir des informations détaillées sur chaque objet détecté
 
 <img src="https://user-images.githubusercontent.com/7164864/217935870-c0bc60a3-6fc0-4047-b011-7b4c59488c91.png" alt="Streamlit logo" style="margin-top:20px"></img>
 
-L'application est développée à l'aide du framework front-end python : [Streamlit](https://streamlit.io/). Les avantages de Streamlit sont :
-
-- Simple et tout en python
-- Prototypage rapide et interactif
-- Rafraîchissement automatique
-- Open-source et gratuit
+Cette application web utilise le framework front-end Python [Streamlit](https://streamlit.io/), reconnu pour sa simplicité, son prototypage rapide et interactif, ainsi que pour son caractère open-source et gratuit.
 
 ### Problèmes rencontrés 
 
@@ -86,9 +75,10 @@ L'application est développée à l'aide du framework front-end python : [Stream
 
 ### Ressources supplémentaires
 
+- https://docs.autodistill.com/
+- [https://docs.ultralytics.com/fr](https://docs.ultralytics.com/fr)
 - [https://github.com/autodistill/autodistill-grounded-sam](https://github.com/autodistill/autodistill-grounded-sam)
 - [https://docs.autodistill.com/base_models/groundedsam/](https://docs.autodistill.com/base_models/groundedsam/)
-- [https://docs.ultralytics.com/fr](https://docs.ultralytics.com/fr)
 - [https://roboflow.com/train/grounded-sam-and-detr](https://roboflow.com/train/grounded-sam-and-detr)
 
 ### Remarques:
