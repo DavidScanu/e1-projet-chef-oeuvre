@@ -79,8 +79,8 @@ L'ensemble du processus de développement du modèle est disponible dans les not
 | Titre  | Notebook  |
 |---|---|
 | 🏷️ Annotations automatiques avec un modèle de base (Base model) | [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Yx053xJrMfcenIW45f8v8zPoFTJsgiMc) |
-| 🗃️ Sauvegarde des données d'entraînement dans la base de donnée analytique | [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ZP6E8BIO1QXTTzsHtAj1kscZCsqVs0RL?usp=sharing) |
-| 🚂 Entraînement du modèle cible YOLOv8 (Target model) | [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ZP6E8BIO1QXTTzsHtAj1kscZCsqVs0RL?usp=sharing) |
+| 🗃️ Sauvegarde des données d'entraînement dans la base de donnée analytique | [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1jA2w1WXoHqTiMBOleNLnS_3WEFtzmI-Q?usp=sharing) |
+| 🚂 Entraînement du modèle cible YOLOv8 (Target model) | [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1R9Rb8FRNEGeHdfeHdDyOKfAEbkOrSPEB?usp=sharing) |
 
 ### 🔗 Ressources supplémentaires
 
