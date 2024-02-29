@@ -1,10 +1,10 @@
 # 🚢⛵🛥️ E1 - Projet chef d'œuvre : Trafic Maritime
 
-Ce projet chef-d'œuvre témoigne de la maîtrise des compétences visées pour l'obtention du titre professionnel : [Développeur en intelligence artificielle (RNCP 34757)](https://www.francecompetences.fr/recherche/rncp/34757/), délivré par [Simplon](https://simplon.co/), dans le cadre de l'[École Microsoft IA Caen par Simplon et ISEN](https://isen-caen.fr/ecole-ia-microsoft-by-simplon-et-isen-ouest/). Ce projet chef d'œuvre comprend la conception d'un programme d'intelligence artificielle complet et la réalisation d’une application qui met à disposition ce programme.
+Ce projet chef-d'œuvre témoigne de la maîtrise des compétences visées pour l'obtention du titre professionnel : [Développeur en intelligence artificielle (RNCP 34757)](https://www.francecompetences.fr/recherche/rncp/34757/), délivré par [Simplon](https://simplon.co/), dans le cadre de l'[École Microsoft IA Caen par Simplon et ISEN](https://isen-caen.fr/ecole-ia-microsoft-by-simplon-et-isen-ouest/). Ce projet chef-d'œuvre implique la création d'un programme d'intelligence artificielle complet, ainsi que le développement d'une application web qui le déploie.
 
 ## 🛳️ Résumé
 
-Mon projet se concentre sur la **détection de bateaux à partir de vues aériennes**. L'objectif principal est d'implémenter des algorithmes de détection d'objets et de suivi d'objets pour identifier et suivre les bateaux dans une scène. Une application potentielle de ce système serait la mesure du nombre de passages de bateaux par heure dans un canal ou une zone spécifique, fournissant ainsi des informations utiles pour la gestion du trafic maritime.
+Mon projet se concentre sur la détection de bateaux à partir de vues aériennes. L'objectif principal est d'implémenter un modèle de détection d'objets et de suivi d'objets pour identifier et suivre les bateaux dans une scène.
 
 - **Domaine** : Vision par ordinateur
 - **Tâche** : Détection d'objets / d’instance, suivi d'objet 
@@ -113,11 +113,10 @@ Projet développé par **David Scanu**, étudiant en intelligence artificielle �
 
 L'[École Microsoft IA Caen par Simplon et ISEN](https://isen-caen.fr/ecole-ia-microsoft-by-simplon-et-isen-ouest/) est une formation en **intelligence artificielle** offrant :
 
-- une certification professionnelle reconnue par l'État (RNCP34757)
-- une certification Agile
-- deux certifications Microsoft Azure.
+- Une certification professionnelle reconnue par l'État (RNCP34757)
+- Une certification Agile
+- Deux certifications Microsoft Azure.
 
-En 2018, Microsoft a créé cette école en partenariat avec Simplon, un réseau de fabriques numériques, pour offrir des opportunités d'emploi dans le domaine de l'IA. 
-La formation comprend l'apprentissage des bases du développement, la maîtrise des données et la conception et le développement de modèles prédictifs de Machine Learning et de Deep Learning.
+En 2018, Microsoft a créé cette école en partenariat avec Simplon, un réseau de fabriques numériques, pour offrir des opportunités d'emploi dans le domaine de l'IA.  La formation comprend l'apprentissage des bases du développement, la maîtrise des données et la conception et le développement de modèles prédictifs de Machine Learning et de Deep Learning.
 
 Cette formation s’effectue en deux temps: après avoir suivi une formation intensive de 7 mois, nous sommes entrés en contrat de professionnalisation de 14 mois en alternance au sein d’une entreprise locale.
