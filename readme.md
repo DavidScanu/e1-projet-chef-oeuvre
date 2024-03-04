@@ -2,11 +2,13 @@
 
 Ce projet chef-d'œuvre témoigne de la maîtrise des compétences visées pour l'obtention du titre professionnel : [Développeur en intelligence artificielle (RNCP 34757)](https://www.francecompetences.fr/recherche/rncp/34757/), délivré par [Simplon](https://simplon.co/), dans le cadre de l'[École Microsoft IA Caen par Simplon et ISEN](https://isen-caen.fr/ecole-ia-microsoft-by-simplon-et-isen-ouest/). Ce projet chef-d'œuvre implique la création d'un programme d'intelligence artificielle complet, ainsi que le développement d'une application web qui le déploie.
 
+> 🎓 Projet développé par [David Scanu](https://www.linkedin.com/in/davidscanu14/), étudiant en intelligence artificielle 🤖 à l'[École Microsoft IA Caen par Simplon et ISEN](https://isen-caen.fr/ecole-ia-microsoft-by-simplon-et-isen-ouest/), 1ère promotion de Caen (2023-2024).
+
 ## 🛳️ Résumé
 
-Mon projet se concentre sur la détection de bateaux à partir de vues aériennes. L'objectif principal est d'implémenter un modèle de détection d'objets et de suivi d'objets pour identifier et suivre les bateaux dans une scène.
+Ce projet se concentre sur la détection de bateaux à partir de vues aériennes. L'objectif principal est d'implémenter un modèle de détection d'objets et de suivi d'objets pour identifier et suivre les bateaux dans une scène.
 
-| | Description |
+| | |
 | --- | --- | 
 | Domaine | Vision par ordinateur | 
 | Tâches | Détection d'objet et suivi d’instance |
