@@ -28,11 +28,66 @@ L'application web de détection propose **la détection d’objets et le suivi d
 - **Détection** et suivi d'objets en temps réel grâce à une interface web performante.
 - **Annotation** des résultats directement sur le navigateur, avec chaque objet entouré d'une boîte de délimitation.
 - **Utilisation simple** : il suffit d'ouvrir l'application dans le navigateur, d'importer le fichier ou d'insérer l'URL YouTube, et de laisser l'application travailler.
-- **Exploration des résultats** : Consultation des annotations (labels de classe, coordonnées des boîtes de détection et score de confiance) pour obtenir des informations détaillées sur chaque objet détecté
+- **Exploration des résultats** : Consultation des annotations (labels de classe, coordonnées des boîtes de détection et score de confiance) pour obtenir des informations détaillées sur chaque objet détecté.
 
 <img src="https://user-images.githubusercontent.com/7164864/217935870-c0bc60a3-6fc0-4047-b011-7b4c59488c91.png" alt="Streamlit logo" style="margin-top:20px"></img>
 
 Cette application web utilise le framework front-end Python [Streamlit](https://streamlit.io/), reconnu pour sa simplicité, son prototypage rapide et interactif, ainsi que pour son caractère open-source et gratuit.
+
+### Utilisation 
+
+- Sélectionnez la tâche (Détection, Segmentation)
+- Sélectionnez la confiance du modèle
+- Utilisez le curseur pour ajuster le seuil de confiance (25-100) du modèle.
+
+#### 🖼️ Détection sur une image
+
+- L'image par défaut avec son image d'objets détectés est affichée sur la page principale.
+- Sélectionnez une source (sélection du bouton radio Image).
+- Téléchargez une image en cliquant sur le bouton "Parcourir les fichiers".
+- Cliquez sur le bouton "Détecter les objets" pour exécuter l'algorithme de détection d'objets sur l'image téléchargée avec le seuil de confiance sélectionné.
+- L'image résultante avec les objets détectés sera affichée sur la page. Cliquez sur le bouton "Télécharger l'image" pour télécharger l'image. ("Si enregistrer l'image pour télécharger" est sélectionné)
+
+#### 📽️ Détection des vidéos
+
+- Créez un dossier avec le nom « vidéos » dans le même répertoire
+- Déposez vos vidéos dans le dossier `videos`
+- Dans `settings.py`, éditez les lignes suivantes.
+
+```python
+# Vidéos
+VIDEO_DIR = ROOT / 'videos'
+
+# Supposons que vous ayez quatre vidéos dans le dossier videos
+# Modifiez le nom de la vidéo_1, 2, 3, 4 (avec les noms de vos fichiers vidéo)
+VIDEO_1_PATH = VIDEO_DIR / 'video_1.mp4' 
+VIDEO_2_PATH = VIDEO_DIR / 'video_2.mp4'
+VIDEO_3_PATH = VIDEO_DIR / 'video_3.mp4'
+VIDEO_4_PATH = VIDEO_DIR / 'video_4.mp4'
+
+# Modifiez les mêmes noms ici également.
+VIDEOS_DICT = {
+    'video_1': VIDEO_1_PATH,
+    'video_2': VIDEO_2_PATH,
+    'video_3': VIDEO_3_PATH,
+    'video_4': VIDEO_4_PATH,
+}
+
+# Vos vidéos commenceront à apparaître dans l'application « Choisir une vidéo ».
+```
+
+- Cliquez sur le bouton **Détecter les objets vidéo** et la tâche sélectionnée (détection ou segmentation) démarrera sur la vidéo sélectionnée.
+
+#### 🌊 Détection sur RTSP
+
+- Sélectionnez le bouton **flux RTSP**
+- Entrez l'URL RTSP dans la zone de texte et cliquez sur le bouton `Détecter les objets`.
+
+#### 📺 Détection sur l'URL de la vidéo YouTube
+
+- Sélectionnez la source comme **YouTube**.
+- Copiez et collez l'URL dans la zone de texte.
+- La tâche de détection/segmentation démarrera sur l'url de la vidéo YouTube.
 
 ### ❌ Problèmes rencontrés 
 
@@ -40,7 +95,7 @@ Cette application web utilise le framework front-end Python [Streamlit](https://
 |---|---|---|---|
 | 1 | Problème d'importation d'Ultralytics au lancement de Streamlit (`streamlit run app.py`) dans un Codespace GitHub | `apt install libgl1-mesa-glx` | [Lien](https://stackoverflow.com/questions/55313610/importerror-libgl-so-1-cannot-open-shared-object-file-no-such-file-or-directo) |
 
-## 🤖 Développement du modèle de détection et de suivi Yolov8
+## 🤖 Développement du modèle de détection et de suivi `Yolov8`
 
 > **Objectif :** Créer un modèle distillé pour la détection et le suivi de bateaux à partir d'images aériennes non étiquetées.
 

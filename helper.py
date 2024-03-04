@@ -58,7 +58,7 @@ def _display_detected_frames(conf, model, st_frame, image, is_display_tracking=N
     # # Plot the detected objects on the video frame
     res_plotted = res[0].plot()
     st_frame.image(res_plotted,
-                   caption='Detected Video',
+                   caption='Vidéo détectée',
                    channels="BGR",
                    use_column_width=True
                    )
@@ -78,11 +78,11 @@ def play_youtube_video(conf, model):
     Raises:
         None
     """
-    source_youtube = st.sidebar.text_input("YouTube Video url")
+    source_youtube = st.sidebar.text_input("URL de la vidéo YouTube")
 
     is_display_tracker, tracker = display_tracker_options()
 
-    if st.sidebar.button('Detect Objects'):
+    if st.sidebar.button('Lancer détection'):
         try:
             yt = YouTube(source_youtube)
             stream = yt.streams.filter(file_extension="mp4", res=720).first()
@@ -103,7 +103,7 @@ def play_youtube_video(conf, model):
                     vid_cap.release()
                     break
         except Exception as e:
-            st.sidebar.error("Error loading video: " + str(e))
+            st.sidebar.error("Erreur de chargement de la vidéo : " + str(e))
 
 
 def play_rtsp_stream(conf, model):
@@ -120,10 +120,10 @@ def play_rtsp_stream(conf, model):
     Raises:
         None
     """
-    source_rtsp = st.sidebar.text_input("rtsp stream url:")
+    source_rtsp = st.sidebar.text_input("URL du flux RTSP :")
     st.sidebar.caption('Example URL: rtsp://admin:12345@192.168.1.210:554/Streaming/Channels/101')
     is_display_tracker, tracker = display_tracker_options()
-    if st.sidebar.button('Detect Objects'):
+    if st.sidebar.button('Lancer détection'):
         try:
             vid_cap = cv2.VideoCapture(source_rtsp)
             st_frame = st.empty()
@@ -145,7 +145,7 @@ def play_rtsp_stream(conf, model):
                     break
         except Exception as e:
             vid_cap.release()
-            st.sidebar.error("Error loading RTSP stream: " + str(e))
+            st.sidebar.error("Erreur lors du chargement du flux RTSP : " + str(e))
 
 
 def play_webcam(conf, model):
@@ -164,7 +164,7 @@ def play_webcam(conf, model):
     """
     source_webcam = settings.WEBCAM_PATH
     is_display_tracker, tracker = display_tracker_options()
-    if st.sidebar.button('Detect Objects'):
+    if st.sidebar.button('Lancer détection'):
         try:
             vid_cap = cv2.VideoCapture(source_webcam)
             st_frame = st.empty()
@@ -182,7 +182,7 @@ def play_webcam(conf, model):
                     vid_cap.release()
                     break
         except Exception as e:
-            st.sidebar.error("Error loading video: " + str(e))
+            st.sidebar.error("Erreur de chargement de la vidéo : " + str(e))
 
 
 def play_stored_video(conf, model):
@@ -200,7 +200,7 @@ def play_stored_video(conf, model):
         None
     """
     source_vid = st.sidebar.selectbox(
-        "Choose a video...", settings.VIDEOS_DICT.keys())
+        "Choisissez une vidéo...", settings.VIDEOS_DICT.keys())
 
     is_display_tracker, tracker = display_tracker_options()
 
@@ -209,7 +209,7 @@ def play_stored_video(conf, model):
     if video_bytes:
         st.video(video_bytes)
 
-    if st.sidebar.button('Detect Video Objects'):
+    if st.sidebar.button('Lancer détection'):
         try:
             vid_cap = cv2.VideoCapture(
                 str(settings.VIDEOS_DICT.get(source_vid)))
@@ -228,4 +228,4 @@ def play_stored_video(conf, model):
                     vid_cap.release()
                     break
         except Exception as e:
-            st.sidebar.error("Error loading video: " + str(e))
+            st.sidebar.error("Erreur de chargement de la vidéo : " + str(e))
