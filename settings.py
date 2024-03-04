@@ -25,12 +25,12 @@ SOURCES_LIST = [IMAGE, VIDEO, WEBCAM, RTSP, YOUTUBE]
 
 # Configuration des images
 IMAGES_DIR = ROOT / 'images'
-DEFAULT_IMAGE = IMAGES_DIR / 'office_4.jpg'
-DEFAULT_DETECT_IMAGE = IMAGES_DIR / 'office_4_detected.jpg'
+DEFAULT_IMAGE = IMAGES_DIR / 'cover-01.jpg'
+DEFAULT_DETECT_IMAGE = IMAGES_DIR / 'cover-01-detected.jpg'
 
 # Configuration des vidéos
 VIDEO_DIR = ROOT / 'videos'
-VIDEO_1_PATH = VIDEO_DIR / 'video_1.mp4'
+VIDEO_1_PATH = VIDEO_DIR / 'demo_1.mp4'
 VIDEO_2_PATH = VIDEO_DIR / 'video_2.mp4'
 VIDEO_3_PATH = VIDEO_DIR / 'video_3.mp4'
 VIDEOS_DICT = {
