@@ -22,8 +22,15 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Session state
+if 'data_erased' not in st.session_state:
+    st.session_state.data_erased = False
+
+def click_detect_button():
+    st.session_state.data_erased = False
+    
 # Main page heading
-st.title("👁️ Détection d'objets avec YOLOv8")
+st.header("👁️ Détection d'objets avec YOLOv8", divider="rainbow")
 
 # Sidebar
 st.sidebar.header("⚗️ Configuration du modèle")
@@ -86,13 +93,14 @@ if source_radio == settings.IMAGE:
                 st.image(default_detected_image_path, caption='Exemple de détection',
                         use_column_width=True)
             else:
-                if st.sidebar.button('Lancer la détection'):
+                if st.sidebar.button('Lancer la détection', on_click=click_detect_button):
 
                     # Effectuer la prédiction
                     res = model.predict(uploaded_image, conf=confidence)
 
                     # Identifiant unique
-                    detection_datetime = datetime.datetime.now(pytz.timezone('Europe/Paris')) 
+                    detection_timezone = pytz.timezone('Europe/Paris')
+                    detection_datetime = datetime.datetime.now(detection_timezone) 
                     UID = detection_datetime.strftime("%Y-%m-%d-%H%M%S")
 
                     # Table "app_img_original"
@@ -149,6 +157,7 @@ if source_radio == settings.IMAGE:
                     except Exception as ex:
                         # st.write(ex)
                         st.write("Aucune image n'a encore été téléchargée !")
+                    
 
 elif source_radio == settings.VIDEO:
     helper.play_stored_video(confidence, model)
@@ -163,4 +172,4 @@ elif source_radio == settings.YOUTUBE:
     helper.play_youtube_video(confidence, model)
 
 else:
-    st.error("Veuillez sélectionner un type de source valide !")
+    st.error("Veuillez sélectionner un type de source valide !")

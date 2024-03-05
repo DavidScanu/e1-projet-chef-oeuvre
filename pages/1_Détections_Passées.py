@@ -25,8 +25,7 @@ st.set_page_config(
 )
 
 # Main page heading
-st.title("🖼️ Détections passées")
-
+st.header("🖼️ Détections passées", divider="rainbow")
 
 
 # Si la table existe
@@ -41,15 +40,30 @@ if database.if_table_exists("app_img_original"):
         """
     past_detections_df = database.sql_query_to_dataframe(sql_query)
 else: 
+    past_detections_df = pd.DataFrame() # DataFrame vide, évite l'erreur avec 'None'
+
+
+# Session state
+if 'data_erased' not in st.session_state:
+    st.session_state.data_erased = False
+
+def click_erase_button():
+    st.session_state.data_erased = True
+
+if st.session_state.data_erased:
     past_detections_df = pd.DataFrame()
+    st.error('Toutes les détections passées sont effacées !', icon="👏")
 
 
+# Si le DataFrame des détections passées est vide
 if past_detections_df.empty:
-    st.warning("⚠️ Aucunes détections pour l'instant. Veuillez réaliser votre première dtection sur la page **Détection**.")
+    st.warning("Aucunes détections sauvegardées. Veuillez réaliser votre première détection sur la page **Détection**.")
 else:
 
     # Trier par dates, du plus récent
-    past_detections_df.sort_values(by='pred_created_at', ascending=False, inplace=True)
+    past_detections_df.sort_values(by='pred_created_at', ascending=False, inplace=True, ignore_index=True)
+    # Conversion de la date au bon Timezone
+    past_detections_df['pred_created_at'] = past_detections_df['pred_created_at'].dt.tz_convert(tz='Europe/Paris')
 
     for i in range(len(past_detections_df)):
         with st.container(border=True):
@@ -81,36 +95,24 @@ else:
                     - **Nombre de boîtes de détection** : {len(detections_df)}
                 """)
                 st.markdown("""##### 📦 Boîtes de détection""")
-                st.write(detections_df)
+                st.dataframe(detections_df)
         
 
-if st.button('🗑️ Effacer les détections passées', type="primary"): 
-
+if st.button('🗑️ Effacer les détections passées', type="primary", on_click=click_erase_button): 
     with st.spinner('Tâche en cours...'):
-
         database.erase_table("app_img_original")
         delete_all_files("detections/imgs-original")
-
         database.erase_table("app_img_detected")
         delete_all_files("detections/imgs-detected")
-
         database.erase_table("app_pred_boxes")
         delete_all_files("detections/pred")
 
-    st.success('Toutes les détections passées sont effacées !', icon="👏")
 
-
-if st.button('❌ DROP', type="primary"): 
-
-    with st.spinner('Tâche en cours...'):
-
-        database.drop_table("app_img_original")
-        delete_all_files("detections/imgs-original")
-
-        database.drop_table("app_img_detected")
-        delete_all_files("detections/imgs-detected")
-
-        database.drop_table("app_pred_boxes")
-        delete_all_files("detections/pred")
-
-    # st.success('Toutes les détections passées sont effacées !', icon="👏")
+# if st.button('⚠️ Supprimer toutes les tables', type="primary", on_click=click_erase_button): 
+#     with st.spinner('Tâche en cours...'):
+#         database.drop_table("app_img_original")
+#         delete_all_files("detections/imgs-original")
+#         database.drop_table("app_img_detected")
+#         delete_all_files("detections/imgs-detected")
+#         database.drop_table("app_pred_boxes")
+#         delete_all_files("detections/pred")

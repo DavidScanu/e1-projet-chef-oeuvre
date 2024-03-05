@@ -33,32 +33,27 @@ def insert_dataframe_to_table(df: pd.DataFrame, table_name:str, primary_key:str=
         - primary_key : Colonne du DataFrame qui sera la clé primaire de la table.
         - if_exists : Comment se comporter si la table existe déjà. Par défaut, 'append' : insérer de nouvelles valeurs dans la table existante.
     """
-
     engine = create_engine(DB_PSY_URI)
-
     data_type = {
         'int64' : db.Integer(),
         'float64' : db.Float(),
         'object' : db.String(255),
-        'datetime64[ns]' : db.DateTime(),
-        'datetime64[ns, Europe/Paris]' : db.DateTime(),
-        'datetime64[us]' : db.DateTime(),
-        'datetime64[us, Europe/Paris]' : db.DateTime(),
+        'datetime64[ns]' : db.TIMESTAMP(),
+        'datetime64[ns, Europe/Paris]' : db.TIMESTAMP(timezone=True),
+        'datetime64[us]' : db.TIMESTAMP(),
+        'datetime64[us, Europe/Paris]' : db.TIMESTAMP(timezone=True),
         'bool' : db.Boolean(),
         'category' : db.String()
     }
     columns = df.columns
     df_dtypes = {column:data_type[str(df[column].dtype)] for column in columns}
-
     try:
         with engine.connect() as conn:
             df.to_sql(table_name, engine, if_exists=if_exists, index=False, dtype=df_dtypes)
-
             # Vérifie que la clé primaire n'existe pas déjà
             metadata = MetaData()
             metadata.reflect(bind=engine)
             table = metadata.tables['app_img_original']
-
             if primary_key and len(inspect(table).primary_key.columns.values()) == 0 :
                 query = f"""ALTER TABLE {table_name} ADD PRIMARY KEY ({primary_key});"""
                 result = conn.execute(text(query))
@@ -132,14 +127,13 @@ def drop_table(table_name):
             table.drop(engine)
             inspector = inspect(engine)
             if not table_name in inspector.get_table_names():
-                st.success(f"Table {table_name} supprimée avec succès !")
+                # st.success(f"Table {table_name} supprimée avec succès !")
                 print(f"Table {table_name} supprimée avec succès !")
-                print()
 
         except Exception as e:
             raise Exception(f"Unexpected error: {e}") from e
     else :
-        print(f"La table '{table_name}' que vous supprimer n'existe pas.")
+        print(f"La table '{table_name}' que vous souhaitez supprimer n'existe pas.")
 
 
 def erase_table(table_name):
