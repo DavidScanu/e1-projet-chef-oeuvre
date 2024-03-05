@@ -1,4 +1,6 @@
 # Python In-built packages
+import datetime
+import pytz
 from pathlib import Path
 import PIL
 
@@ -14,13 +16,13 @@ import helper
 # Setting page layout
 st.set_page_config(
     page_title="Détection d'objets avec YOLOv8",
-    page_icon="👀",
+    page_icon="👁️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 # Main page heading
-st.title("👀 Détection d'objets avec YOLOv8")
+st.header("👁️ Détection d'objets avec YOLOv8", divider="rainbow")
 
 # Sidebar
 st.sidebar.header("⚗️ Configuration du modèle")
@@ -66,6 +68,7 @@ if source_radio == settings.IMAGE:
                          use_column_width=True)
             else:
                 uploaded_image = PIL.Image.open(source_img)
+                # Montrer l'image
                 st.image(source_img, caption="Image originale",
                          use_column_width=True)
         except Exception as ex:
@@ -81,11 +84,19 @@ if source_radio == settings.IMAGE:
                      use_column_width=True)
         else:
             if st.sidebar.button('Lancer la détection'):
-                res = model.predict(uploaded_image,
-                                    conf=confidence
-                                    )
+                # Effectuer la prédiction
+                res = model.predict(uploaded_image, conf=confidence)
+                # Identifiant unique
+                UID = datetime.datetime.now(pytz.timezone('Europe/Paris')).strftime("%Y-%m-%d-%H%M%S")
+                original_img_filepath = f"images/uploaded/{UID}-original.jpg"
+                detected_img_filepath = f"images/detected/{UID}-detected.jpg"
+                # Sauvegarder l'image dans "images/uploaded"
+                uploaded_image.save(original_img_filepath)
+                # Boîtes de détection
                 boxes = res[0].boxes
-                res_plotted = res[0].plot()[:, :, ::-1]
+                # Tracer les résultats et sauvegarder l'image détectée dans "images/detected"
+                res_plotted = res[0].plot(save=True, filename=detected_img_filepath)[:, :, ::-1]
+                # Afficher l'image avec les boîtes de détection
                 st.image(res_plotted, caption='Image détectée',
                          use_column_width=True)
                 try:

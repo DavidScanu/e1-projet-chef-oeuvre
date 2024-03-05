@@ -1,6 +1,6 @@
 # 🚢⛵🛥️ E1 - Projet chef d'œuvre : Trafic Maritime
 
-Ce projet chef-d'œuvre témoigne de la maîtrise des compétences visées pour l'obtention du titre professionnel : [Développeur en intelligence artificielle (RNCP 34757)](https://www.francecompetences.fr/recherche/rncp/34757/), délivré par [Simplon](https://simplon.co/), dans le cadre de l'[École Microsoft IA Caen par Simplon et ISEN](https://isen-caen.fr/ecole-ia-microsoft-by-simplon-et-isen-ouest/). Ce projet chef-d'œuvre implique la création d'un programme d'intelligence artificielle complet, ainsi que le développement d'une application web qui le déploie.
+Ce projet chef-d'œuvre (réf. E1) témoigne de la maîtrise des compétences visées pour l'obtention du titre professionnel : [Développeur en intelligence artificielle (RNCP 34757)](https://www.francecompetences.fr/recherche/rncp/34757/), délivré par [Simplon](https://simplon.co/), dans le cadre de l'[École Microsoft IA Caen par Simplon et ISEN](https://isen-caen.fr/ecole-ia-microsoft-by-simplon-et-isen-ouest/). Ce projet chef-d'œuvre implique la création d'un programme d'intelligence artificielle complet, ainsi que le développement d'une application web qui le déploie.
 
 > 🎓 Projet développé par [David Scanu](https://www.linkedin.com/in/davidscanu14/), étudiant en intelligence artificielle 🤖 à l'[École Microsoft IA Caen par Simplon et ISEN](https://isen-caen.fr/ecole-ia-microsoft-by-simplon-et-isen-ouest/), 1ère promotion de Caen (2023-2024).
 
@@ -24,7 +24,9 @@ Voici quelques usages possibles pour l'application de détection et de suivi de 
 
 ## 💻 Application web 
 
-L'application web de détection propose **la détection d’objets et le suivi d’instances à partir d'images, de vidéos ou d'URL YouTube**. Ses fonctionnalités principales comprennent :
+### Fonctionnalités
+
+Cette application web de détection propose **la détection d’objets et le suivi d’instances à partir d'images, de vidéos ou d'URL YouTube**. Ses fonctionnalités principales comprennent :
 
 - **Importation** d'images, de vidéos ou d'URL YouTube.
 - **Détection** et suivi d'objets en temps réel grâce à une interface web performante.
@@ -32,9 +34,12 @@ L'application web de détection propose **la détection d’objets et le suivi d
 - **Utilisation simple** : il suffit d'ouvrir l'application dans le navigateur, d'importer le fichier ou d'insérer l'URL YouTube, et de laisser l'application travailler.
 - **Exploration des résultats** : Consultation des annotations (labels de classe, coordonnées des boîtes de détection et score de confiance) pour obtenir des informations détaillées sur chaque objet détecté.
 
-<img src="https://user-images.githubusercontent.com/7164864/217935870-c0bc60a3-6fc0-4047-b011-7b4c59488c91.png" alt="Streamlit logo" style="margin-top:20px"></img>
+### Technologies utilisées
 
-Cette application web utilise le framework front-end Python [Streamlit](https://streamlit.io/), reconnu pour sa simplicité, son prototypage rapide et interactif, ainsi que pour son caractère open-source et gratuit.
+Cette application utilise : 
+
+- Un modèle [Yolov8](https://docs.ultralytics.com/fr) personnalisé pour réaliser les détections dans les images et les vidéos.
+- Le framework front-end Python [Streamlit](https://streamlit.io/), reconnu pour sa simplicité, son prototypage rapide et interactif, ainsi que pour son caractère open-source et gratuit.
 
 ### Utilisation 
 
