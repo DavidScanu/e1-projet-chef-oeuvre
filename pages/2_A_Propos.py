@@ -11,7 +11,7 @@ st.set_page_config(
 
 
 # Main page heading
-st.header("👋 A propos", divider="rainbow")
+st.title("👋 A propos")
 
 # Sidebar
 st.sidebar.header("🛠️ Outils")
