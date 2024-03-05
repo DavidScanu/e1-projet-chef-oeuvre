@@ -41,7 +41,9 @@ def insert_dataframe_to_table(df: pd.DataFrame, table_name:str, primary_key:str=
         'float64' : db.Float(),
         'object' : db.String(255),
         'datetime64[ns]' : db.DateTime(),
-        # 'datetime64[us]' : db.DateTime(),
+        'datetime64[ns, Europe/Paris]' : db.DateTime(),
+        'datetime64[us]' : db.DateTime(),
+        'datetime64[us, Europe/Paris]' : db.DateTime(),
         'bool' : db.Boolean(),
         'category' : db.String()
     }
@@ -130,12 +132,14 @@ def drop_table(table_name):
             table.drop(engine)
             inspector = inspect(engine)
             if not table_name in inspector.get_table_names():
-                print(f"Table {table_name} effacée avec succès !")
+                st.success(f"Table {table_name} supprimée avec succès !")
+                print(f"Table {table_name} supprimée avec succès !")
+                print()
 
         except Exception as e:
             raise Exception(f"Unexpected error: {e}") from e
     else :
-        print("La table que vous souhaitez effacer n'existe pas.")
+        print(f"La table '{table_name}' que vous supprimer n'existe pas.")
 
 
 def erase_table(table_name):
@@ -160,4 +164,4 @@ def erase_table(table_name):
         except Exception as e:
             raise Exception(f"Unexpected error: {e}") from e
     else :
-        print("La table que vous souhaitez effacer n'existe pas.")
+        print(f"La table '{table_name}' dont vous souhaitez effacer les lignes n'existe pas.")
