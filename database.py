@@ -53,7 +53,7 @@ def insert_dataframe_to_table(df: pd.DataFrame, table_name:str, primary_key:str=
             # Vérifie que la clé primaire n'existe pas déjà
             metadata = MetaData()
             metadata.reflect(bind=engine)
-            table = metadata.tables['app_img_original']
+            table = metadata.tables[table_name]
             if primary_key and len(inspect(table).primary_key.columns.values()) == 0 :
                 query = f"""ALTER TABLE {table_name} ADD PRIMARY KEY ({primary_key});"""
                 result = conn.execute(text(query))
