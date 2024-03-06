@@ -128,6 +128,7 @@ if source_radio == settings.IMAGE:
                     job_dict['job_speed'] = float(sum(res[0].speed.values())) # vitesse de détection en ms
                     job_dict['job_confidence'] = confidence
                     job_dict['job_task'] = model_type
+                    job_dict['job_count'] = len(res[0].boxes)
                     job_dict['job_model_filename'] = os.path.basename(str(model_path))
                     job_dict['job_model_weights_path'] = str(model_path)
                     # clés étrangères
@@ -183,7 +184,6 @@ if source_radio == settings.IMAGE:
 
                     # Boîtes de détection
                     boxes = res[0].boxes
-
                     boxes_list = []
 
                     # Table "app_detection_boxes"
