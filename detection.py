@@ -103,44 +103,44 @@ if source_radio == settings.IMAGE:
                     detection_datetime = datetime.datetime.now(detection_timezone) 
                     UID = detection_datetime.strftime("%Y-%m-%d-%H%M%S")
 
-                    # Table "app_img_original"
+                    # Table "app_imgs_original"
                     og_img_dict = {}
                     og_img_dict['og_id'] = UID
                     og_img_dict['og_filename'] = f"{og_img_dict['og_id']}-original.jpg"
                     og_img_dict['og_filepath'] = f"detections/imgs-original/{og_img_dict['og_filename']}"
                     og_img_dict['og_height'] = res[0].orig_shape[0]
                     og_img_dict['og_width'] = res[0].orig_shape[1]
-                    # Sauvegarde dans la table "app_img_original"
+                    # Sauvegarde dans la table "app_imgs_original"
                     og_img_df = pd.DataFrame(og_img_dict, index=[0])
                     og_img_df['og_created_at'] = pd.Timestamp.now(tz="Europe/Paris")
-                    database.insert_dataframe_to_table(og_img_df, "app_img_original", "og_id")
+                    database.insert_dataframe_to_table(og_img_df, "app_imgs_original", "og_id")
                     # Sauvegarder le fichier image
                     uploaded_image.save(og_img_dict['og_filepath'])
 
-                    # Table "app_img_detected"
+                    # Table "app_imgs_detected"
                     detected_img_dict = {}
                     detected_img_dict['dt_id'] = UID
                     detected_img_dict['dt_filename'] = f"{detected_img_dict['dt_id']}-detected.jpg"
                     detected_img_dict['dt_filepath'] = f"detections/imgs-detected/{detected_img_dict['dt_filename']}"
                     detected_img_dict['dt_og_img_id'] = og_img_dict['og_id'] # Clé étrangère
-                    # Sauvegarde dans la table "app_img_detected"
+                    # Sauvegarde dans la table "app_imgs_detected"
                     detected_img_df = pd.DataFrame(detected_img_dict, index=[0])
                     detected_img_df['dt_created_at'] = pd.Timestamp.now(tz="Europe/Paris")
-                    database.insert_dataframe_to_table(detected_img_df, "app_img_detected", "dt_id")
+                    database.insert_dataframe_to_table(detected_img_df, "app_imgs_detected", "dt_id")
                     # Tracer les résultats et sauvegarder le fichier de l'image détectée
                     img_plotted = res[0].plot(save=True, filename=detected_img_dict['dt_filepath'])[:, :, ::-1]
 
-                    # Table "app_pred_boxes"
+                    # Table "app_detection_files"
                     pred_boxes_dict = {}
                     pred_boxes_dict['pred_id'] = UID
                     pred_boxes_dict['pred_filename'] = f"{pred_boxes_dict['pred_id']}.txt"
                     pred_boxes_dict['pred_filepath'] = f"detections/pred/{pred_boxes_dict['pred_filename']}"
                     pred_boxes_dict['pred_speed'] = float(sum(res[0].speed.values())) # vitesse de détection en ms
                     pred_boxes_dict['pred_og_img_id'] = og_img_dict['og_id'] # Clé étrangère
-                    # Sauvegarde dans la table "app_pred_boxes"
+                    # Sauvegarde dans la table "app_detection_files"
                     pred_boxes_df = pd.DataFrame(pred_boxes_dict, index=[0])
                     pred_boxes_df['pred_created_at'] = pd.Timestamp.now(tz="Europe/Paris")
-                    database.insert_dataframe_to_table(pred_boxes_df, "app_pred_boxes", "pred_id")
+                    database.insert_dataframe_to_table(pred_boxes_df, "app_detection_files", "pred_id")
                     # Enregistre les prédictions dans un fichier txt.
                     res[0].save_txt(pred_boxes_dict['pred_filepath'])
 
