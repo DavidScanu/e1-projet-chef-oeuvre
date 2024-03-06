@@ -28,20 +28,21 @@ st.set_page_config(
 st.header("🖼️ Détections passées", divider="rainbow")
 
 
-# Si la table existe
-if database.if_table_exists("app_imgs_original"):
-    # Requete jointe pour afficher les détections passées
-    sql_query = """
-        SELECT * FROM app_imgs_original
-        JOIN app_imgs_detected
-        ON app_imgs_original.og_id = app_imgs_detected.dt_og_img_id
-        JOIN app_detection_files
-        ON app_imgs_original.og_id = app_detection_files.pred_og_img_id
-        """
-    past_detections_df = database.sql_query_to_dataframe(sql_query)
-else: 
-    past_detections_df = pd.DataFrame() # DataFrame vide, évite l'erreur avec 'None'
+# # Si la table existe
+# if database.if_table_exists("app_imgs_original"):
+#     # Requete jointe pour afficher les détections passées
+#     sql_query = """
+#         SELECT * FROM app_imgs_original
+#         JOIN app_imgs_detected
+#         ON app_imgs_original.og_id = app_imgs_detected.dt_og_img_id
+#         JOIN app_detection_files
+#         ON app_imgs_original.og_id = app_detection_files.pred_og_img_id
+#         """
+#     past_detections_df = database.sql_query_to_dataframe(sql_query)
+# else: 
+#     past_detections_df = pd.DataFrame() # DataFrame vide, évite l'erreur avec 'None'
 
+past_detections_df = pd.DataFrame()
 
 # Session state
 if 'data_erased' not in st.session_state:
@@ -100,19 +101,22 @@ else:
 
 if st.button('🗑️ Effacer les détections passées', type="primary", on_click=click_erase_button): 
     with st.spinner('Tâche en cours...'):
+        database.erase_table("app_detection_jobs")
         database.erase_table("app_imgs_original")
         delete_all_files("detections/imgs-original")
         database.erase_table("app_imgs_detected")
         delete_all_files("detections/imgs-detected")
-        database.erase_table("app_detection_files")
-        delete_all_files("detections/pred")
-
+        database.erase_table("app_detection_labels")
+        delete_all_files("detections/labels")
+        database.erase_table("app_detection_boxes")
 
 if st.button('⚠️ Supprimer toutes les tables', type="primary", on_click=click_erase_button): 
     with st.spinner('Tâche en cours...'):
+        database.drop_table("app_detection_jobs")
         database.drop_table("app_imgs_original")
         delete_all_files("detections/imgs-original")
         database.drop_table("app_imgs_detected")
         delete_all_files("detections/imgs-detected")
-        database.drop_table("app_detection_files")
-        delete_all_files("detections/pred")
+        database.drop_table("app_detection_labels")
+        delete_all_files("detections/labels")
+        database.drop_table("app_detection_boxes")
