@@ -85,17 +85,32 @@ else:
                     """
                 detections_boxes_df = database.sql_query_to_dataframe(boxes_sql_query)
 
+                # detection_misc_info_dict = {
+                #     "Nom de l'image originale" : past_detections_df.loc[i, 'og_filename'],
+                #     "Nom de l'image détectée" : past_detections_df.loc[i, 'dt_filename'],
+                #     "Date de détection" : past_detections_df.loc[i, 'job_created_at'],
+                #     "Vitesse de détection" : round(past_detections_df.loc[i, 'job_speed'], 2),
+                #     "Nombre de classes d'objets différentes" : detections_boxes_df['box_class_id'].nunique(),
+                #     "Nombre de boîtes de détection" : len(detections_boxes_df)
+                # }
+                # detection_misc_info_dict_converted = {
+                #     'Description' : [k for k in detection_misc_info_dict.keys()],
+                #     'Valeur' : [v for v in detection_misc_info_dict.values()]
+                # }
+                # detection_misc_info_df = pd.DataFrame(detection_misc_info_dict_converted)
+                # st.dataframe(detection_misc_info_df)
+
                 st.markdown(f"""
+                    - **Date de détection** : {past_detections_df.loc[i, 'job_created_at'].strftime('%Y-%m-%d %X')}   
                     - **Nom de l'image originale** : {past_detections_df.loc[i, 'og_filename']}
                     - **Nom de l'image détectée** : {past_detections_df.loc[i, 'dt_filename']}
-                    - **Date de détection** : {past_detections_df.loc[i, 'job_created_at'].strftime('%Y-%m-%d %X')}
                     - **Vitesse de détection** : {round(past_detections_df.loc[i, 'job_speed'], 2)} ms
                     - **Nombre de classes d'objets différentes** : {detections_boxes_df['box_class_id'].nunique()}
                     - **Nombre de boîtes de détection** : {len(detections_boxes_df)}
                 """)
                 st.markdown("""##### 📦 Boîtes de détection""")
                 st.dataframe(detections_boxes_df[['box_class_name', 'box_class_id', 'box_conf', 'box_x_center', 'box_y_center', 'box_width', 'box_height']])
-        
+
 
 if st.button('🗑️ Effacer les détections passées', type="primary", on_click=click_erase_button): 
     with st.spinner('Tâche en cours...'):

@@ -78,8 +78,9 @@ if source_radio == settings.IMAGE:
     source_img = st.sidebar.file_uploader(
         "Choisissez une image...", type=("jpg", "jpeg", "png", 'bmp', 'webp'))
 
-
     with st.container(border=True):
+
+        boxes_list = []
         col1, col2 = st.columns(2)
 
         with col1:
@@ -184,7 +185,6 @@ if source_radio == settings.IMAGE:
 
                     # Boîtes de détection
                     boxes = res[0].boxes
-                    boxes_list = []
 
                     # Table "app_detection_boxes"
                     for box in boxes:
@@ -205,19 +205,28 @@ if source_radio == settings.IMAGE:
 
                         boxes_list.append(box_dict)
 
-                        # box_df = pd.DataFrame(box_dict, index=[0])
-                        # database.insert_dataframe_to_table(box_df, "app_detection_boxes", "box_id", if_exists = 'append')
+        if boxes_list :
 
-                    # Afficher les boxes sur la page "Détection"
-                    boxes_df = pd.DataFrame(boxes_list)
-                    database.insert_dataframe_to_table(boxes_df, "app_detection_boxes", "box_id", if_exists = 'append')
-                    try:
-                        with st.expander("Résultats de détection"):
-                            st.dataframe(boxes_df[['box_class_id', 'box_class_name', 'box_conf', 'box_x_center', 'box_y_center', 'box_width', 'box_height']])
-                    except Exception as ex:
-                        # st.write(ex)
-                        st.write("Aucune image n'a encore été téléchargée !")
-                    
+            # Afficher les boxes sur la page "Détection"
+            boxes_df = pd.DataFrame(boxes_list)
+            database.insert_dataframe_to_table(boxes_df, "app_detection_boxes", "box_id", if_exists = 'append')
+
+            try:
+                with st.expander("📝 Résultats de détection"):
+                    st.markdown(f"""
+                        - **Date de détection** : {job_df.loc[0, 'job_created_at'].strftime('%Y-%m-%d %X')}   
+                        - **Nom de l'image originale** : {og_img_dict['og_filename']}
+                        - **Nom de l'image détectée** : {detected_img_dict['dt_filename']}
+                        - **Vitesse de détection** : {round(job_dict['job_speed'], 2)} ms
+                        - **Nombre de classes d'objets différentes** : {boxes_df['box_class_id'].nunique()}
+                        - **Nombre de boîtes de détection** : {len(boxes_df)}
+                    """)
+                    st.markdown("""##### 📦 Boîtes de détection""")
+                    st.dataframe(boxes_df[['box_class_id', 'box_class_name', 'box_conf', 'box_x_center', 'box_y_center', 'box_width', 'box_height']])
+            except Exception as ex:
+                # st.write(ex)
+                st.write("Aucune image n'a encore été téléchargée !")
+                
 
 elif source_radio == settings.VIDEO:
     helper.play_stored_video(confidence, model)

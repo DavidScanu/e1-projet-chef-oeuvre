@@ -11,17 +11,15 @@ from sqlalchemy.types import *
 from sqlalchemy import text
 from sqlalchemy import delete
 
-
 # URL de la base de données, cachée dans un secret streamlit
 DB_PSY_URI = st.secrets.DB_PSY_URI
 
-
 # # 🔎 Inspect - Get Database Information
+# engine = create_engine(DB_PSY_URI)
 # inspector = inspect(engine)
 # # Get tables information
 # for table in inspector.get_table_names() :
 #     print(table)
-
 
 def insert_dataframe_to_table(df: pd.DataFrame, table_name:str, primary_key:str=None, if_exists='append'):
     """
@@ -85,9 +83,6 @@ def from_table_to_dataframe(table_name, parse_dates=None):
         raise Exception(f"Unexpected error: {e}") from e
 
 
-
-
-
 def sql_query_to_dataframe(query: str):
     """
     Requete SQL Brute avec SQLAlchemy. 
@@ -97,7 +92,7 @@ def sql_query_to_dataframe(query: str):
     """
     engine = create_engine(DB_PSY_URI)
     sql_query = text(query)
-    with engine.connect() as conn, conn.begin():  
+    with engine.connect() as conn:  
         df = pd.read_sql_query(sql_query, conn)
         return df
 
@@ -108,8 +103,8 @@ def if_table_exists(table_name):
     if inspector.has_table(table_name):
         return True
     else:
-        return False    
-
+        return False
+    
 
 def drop_table(table_name):
     """
