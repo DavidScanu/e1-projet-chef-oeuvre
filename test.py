@@ -3,8 +3,7 @@ import streamlit as st
 from ultralytics import YOLO
 
 from sqlalchemy import create_engine
-from sqlalchemy import inspect
-import sqlalchemy
+from sqlalchemy.engine.base import Engine
 
 import database 
 import os
@@ -38,11 +37,7 @@ class TestDatabase(TestCase):
         self.assertIsNotNone(DB_PSY_URI)
 
         engine = create_engine(DB_PSY_URI)
-        self.assertIsInstance(engine, sqlalchemy.engine.base.Engine)
-
-        # inspector = inspect(engine)
-        # for table in inspector.get_table_names() :
-        #     print(table)
+        self.assertIsInstance(engine, Engine)
 
 class TestLoadModel(TestCase):
     # Vérifier le chargement des poids dans le modèle Yolo
