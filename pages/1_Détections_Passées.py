@@ -28,21 +28,21 @@ st.set_page_config(
 st.header("🖼️ Détections passées", divider="rainbow")
 
 
-# # Si la table existe
-# if database.if_table_exists("app_imgs_original"):
-#     # Requete jointe pour afficher les détections passées
-#     sql_query = """
-#         SELECT * FROM app_imgs_original
-#         JOIN app_imgs_detected
-#         ON app_imgs_original.og_id = app_imgs_detected.dt_og_img_id
-#         JOIN app_detection_files
-#         ON app_imgs_original.og_id = app_detection_files.pred_og_img_id
-#         """
-#     past_detections_df = database.sql_query_to_dataframe(sql_query)
-# else: 
-#     past_detections_df = pd.DataFrame() # DataFrame vide, évite l'erreur avec 'None'
-
-past_detections_df = pd.DataFrame()
+# Si la table existe
+if database.if_table_exists("app_detection_jobs"):
+    # Requete jointe pour afficher les détections passées
+    sql_query = """
+        SELECT * FROM app_detection_jobs
+        JOIN app_imgs_original
+        ON job_og_id = og_id
+        JOIN app_imgs_detected
+        ON job_dt_id = dt_id
+        JOIN app_detection_labels
+        ON job_label_id = label_id
+        """
+    past_detections_df = database.sql_query_to_dataframe(sql_query)
+else: 
+    past_detections_df = pd.DataFrame() # DataFrame vide, évite l'erreur avec 'None'
 
 # Session state
 if 'data_erased' not in st.session_state:
@@ -62,9 +62,9 @@ if past_detections_df.empty:
 else:
 
     # Trier par dates, du plus récent
-    past_detections_df.sort_values(by='pred_created_at', ascending=False, inplace=True, ignore_index=True)
+    past_detections_df.sort_values(by='job_created_at', ascending=False, inplace=True, ignore_index=True)
     # Conversion de la date au bon Timezone
-    past_detections_df['pred_created_at'] = past_detections_df['pred_created_at'].dt.tz_convert(tz='Europe/Paris')
+    past_detections_df['job_created_at'] = past_detections_df['job_created_at'].dt.tz_convert(tz='Europe/Paris')
 
     for i in range(len(past_detections_df)):
         with st.container(border=True):
@@ -77,26 +77,24 @@ else:
                 st.image(past_detections_df.loc[i, 'dt_filepath'])
 
             with st.expander("📝 Détails de la détection"):
-                with open(past_detections_df.loc[i, 'pred_filepath']) as f:
-                    # lecture des lignes dans le fichier texte
-                    lines = f.readlines()
-                    detections_list = []
-                    for line in lines:
-                        # print("Line{}: {}".format(count, line.strip()))
-                        line_splitted = line.strip().split(" ")
-                        detections_list.append(line_splitted)
 
-                    # class x_center y_center width height
-                    detections_df = pd.DataFrame(detections_list, columns=['class', 'x_center', 'y_center', 'width', 'height'])
+                # Detection Boxes
+                boxes_sql_query = f"""
+                    SELECT * FROM app_detection_boxes
+                    WHERE box_job_id = '{past_detections_df.loc[i, 'job_id']}'
+                    """
+                detections_boxes_df = database.sql_query_to_dataframe(boxes_sql_query)
 
                 st.markdown(f"""
-                    - **Date de détection** : {past_detections_df.loc[i, 'pred_created_at'].strftime('%Y-%m-%d %X')}
-                    - **Vitesse de détection** : {round(past_detections_df.loc[i, 'pred_speed'], 2)} ms
-                    - **Nombre de classes d'objets différentes** : {detections_df['class'].nunique()}
-                    - **Nombre de boîtes de détection** : {len(detections_df)}
+                    - **Nom de l'image originale** : {past_detections_df.loc[i, 'og_filename']}
+                    - **Nom de l'image détectée** : {past_detections_df.loc[i, 'dt_filename']}
+                    - **Date de détection** : {past_detections_df.loc[i, 'job_created_at'].strftime('%Y-%m-%d %X')}
+                    - **Vitesse de détection** : {round(past_detections_df.loc[i, 'job_speed'], 2)} ms
+                    - **Nombre de classes d'objets différentes** : {detections_boxes_df['box_class_id'].nunique()}
+                    - **Nombre de boîtes de détection** : {len(detections_boxes_df)}
                 """)
                 st.markdown("""##### 📦 Boîtes de détection""")
-                st.dataframe(detections_df)
+                st.dataframe(detections_boxes_df[['box_class_name', 'box_class_id', 'box_conf', 'box_x_center', 'box_y_center', 'box_width', 'box_height']])
         
 
 if st.button('🗑️ Effacer les détections passées', type="primary", on_click=click_erase_button): 

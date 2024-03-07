@@ -3,6 +3,7 @@ secrets.toml
 
 file_list.csv
 test-pagination.py
+notebook.ipynb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

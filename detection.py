@@ -144,7 +144,7 @@ if source_radio == settings.IMAGE:
                     # Table "app_imgs_original"
                     og_img_dict = {}
                     og_img_dict['og_id'] = og_id
-                    og_img_dict['og_filename'] = f"{og_img_dict['og_id']}-original.jpg"
+                    og_img_dict['og_filename'] = f"{UID}-original.jpg"
                     og_img_dict['og_filepath'] = f"detections/imgs-original/{og_img_dict['og_filename']}"
                     og_img_dict['og_height'] = res[0].orig_shape[0]
                     og_img_dict['og_width'] = res[0].orig_shape[1]
@@ -157,7 +157,7 @@ if source_radio == settings.IMAGE:
                     # Table "app_imgs_detected"
                     detected_img_dict = {}
                     detected_img_dict['dt_id'] = dt_id
-                    detected_img_dict['dt_filename'] = f"{detected_img_dict['dt_id']}-detected.jpg"
+                    detected_img_dict['dt_filename'] = f"{UID}-detected.jpg"
                     detected_img_dict['dt_filepath'] = f"detections/imgs-detected/{detected_img_dict['dt_filename']}"
                     # Sauvegarde dans la table
                     detected_img_df = pd.DataFrame(detected_img_dict, index=[0])
@@ -168,7 +168,7 @@ if source_radio == settings.IMAGE:
                     # Table "app_detection_labels"
                     label_dict = {}
                     label_dict['label_id'] = label_id
-                    label_dict['label_filename'] = f"{label_dict['label_id']}.txt"
+                    label_dict['label_filename'] = f"{UID}.txt"
                     label_dict['label_filepath'] = f"detections/labels/{label_dict['label_filename']}"
                     # Sauvegarde dans la table
                     label_df = pd.DataFrame(label_dict, index=[0])
@@ -205,19 +205,15 @@ if source_radio == settings.IMAGE:
 
                         boxes_list.append(box_dict)
 
-                        # for k, v in box_dict.items():
-                        #     print(f"{k} : {v}")
-
-                        box_df = pd.DataFrame(box_dict, index=[0])
-                        database.insert_dataframe_to_table(box_df, "app_detection_boxes", "box_id", if_exists = 'append')
+                        # box_df = pd.DataFrame(box_dict, index=[0])
+                        # database.insert_dataframe_to_table(box_df, "app_detection_boxes", "box_id", if_exists = 'append')
 
                     # Afficher les boxes sur la page "Détection"
                     boxes_df = pd.DataFrame(boxes_list)
+                    database.insert_dataframe_to_table(boxes_df, "app_detection_boxes", "box_id", if_exists = 'append')
                     try:
                         with st.expander("Résultats de détection"):
                             st.dataframe(boxes_df[['box_class_id', 'box_class_name', 'box_conf', 'box_x_center', 'box_y_center', 'box_width', 'box_height']])
-                            # for box in boxes:
-                            #     st.write(box.data)
                     except Exception as ex:
                         # st.write(ex)
                         st.write("Aucune image n'a encore été téléchargée !")
