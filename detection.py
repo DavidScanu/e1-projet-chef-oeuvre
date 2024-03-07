@@ -107,7 +107,7 @@ if source_radio == settings.IMAGE:
                 st.image(default_detected_image_path, caption='Exemple de détection',
                         use_column_width=True)
             else:
-                if st.sidebar.button('Lancer la détection', on_click=click_detect_button):
+                if st.sidebar.button('Lancer la détection',on_click=click_detect_button, use_container_width=True):
 
                     # Effectuer la prédiction
                     res = model.predict(uploaded_image, conf=confidence)
@@ -226,7 +226,21 @@ if source_radio == settings.IMAGE:
             except Exception as ex:
                 # st.write(ex)
                 st.write("Aucune image n'a encore été téléchargée !")
-                
+
+        # Feedback
+        # with st.container():
+        #     st.subheader('Feedback')
+        #     if st.button('👍 Good'):
+        #         feedback_dict = {}
+        #         feedback_dict['fb_id'] = uuid.uuid4()
+        #         feedback_dict['fb_feeback'] = True
+        #         feedback_dict['fb_job_id'] = job_id
+        #         print(feedback_dict)
+        #         # Sauvegarde
+        #         # feedback_df = pd.DataFrame(feedback_dict, index=[0])
+        #         # database.insert_dataframe_to_table(feedback_df, "app_feedbacks", "fb_id", if_exists = 'append')
+        #         st.success('Merci pour votre feedback !')
+
 
 elif source_radio == settings.VIDEO:
     helper.play_stored_video(confidence, model)
