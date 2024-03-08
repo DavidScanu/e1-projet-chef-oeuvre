@@ -1,5 +1,6 @@
 ultralytics
 streamlit
+st-star-rating
 Pyarrow
 pytube
 Pillow

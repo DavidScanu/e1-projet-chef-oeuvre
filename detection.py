@@ -8,6 +8,7 @@ import uuid
 
 # External packages
 import streamlit as st
+from streamlit_star_rating import st_star_rating
 import pandas as pd
 
 # Local Modules
@@ -34,13 +35,26 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+
 # Session state
 if 'data_erased' not in st.session_state:
     st.session_state.data_erased = False
 
-def click_detect_button():
+def on_click_detect_button():
     st.session_state.data_erased = False
+
+# Ratings
+if 'rating' not in st.session_state:
+    st.session_state['rating'] = None
+
+if 'rating_read_only' not in st.session_state:
+    st.session_state['rating_read_only'] = False
     
+def on_click_rating(value):
+    st.session_state['rating'] = {value}
+    st.session_state['rating_read_only'] = True
+    st.success(f"Merci pour votre évaluation ! {st.session_state['rating']}")
+
 # Main page heading
 st.header("👁️ Détection d'objets avec YOLOv8", divider="rainbow")
 
@@ -107,7 +121,7 @@ if source_radio == settings.IMAGE:
                 st.image(default_detected_image_path, caption='Exemple de détection',
                         use_column_width=True)
             else:
-                if st.sidebar.button('Lancer la détection',on_click=click_detect_button, use_container_width=True):
+                if st.sidebar.button('Lancer la détection',on_click=on_click_detect_button, use_container_width=True):
 
                     # Effectuer la prédiction
                     res = model.predict(uploaded_image, conf=confidence)
@@ -121,7 +135,6 @@ if source_radio == settings.IMAGE:
                     og_id = uuid.uuid4()
                     dt_id = uuid.uuid4()
                     label_id = uuid.uuid4()
-
 
                     # Table "app_detection_jobs"
                     job_dict = {}
@@ -229,19 +242,28 @@ if source_radio == settings.IMAGE:
                 # st.write(ex)
                 st.write("Aucune image n'a encore été téléchargée !")
 
-        # Feedback
-        # with st.container():
-        #     st.subheader('Feedback')
-        #     if st.button('👍 Good'):
-        #         feedback_dict = {}
-        #         feedback_dict['fb_id'] = uuid.uuid4()
-        #         feedback_dict['fb_feeback'] = True
-        #         feedback_dict['fb_job_id'] = job_id
-        #         print(feedback_dict)
-        #         # Sauvegarde
-        #         # feedback_df = pd.DataFrame(feedback_dict, index=[0])
-        #         # database.insert_dataframe_to_table(feedback_df, "app_feedbacks", "fb_id", if_exists = 'append')
-        #         st.success('Merci pour votre feedback !')
+
+
+
+
+
+    # Rating
+    st.markdown("""
+    #### Rating
+    Notez la détection afin de nous aider à améliorer notre modèle !
+    """)
+    rating = st_star_rating('Rating', 5, 3, 20, read_only=False, on_click=on_click_rating, customCSS="h3 {display: none;}")
+    st.write(st.session_state['rating_read_only'])
+
+            # rating_dict = {}
+            # rating_dict['dr_id'] = uuid.uuid4()
+            # rating_dict['dr_rating'] = st.session_state['rating'] # stars
+            # rating_dict['dr_job_id'] = job_id
+            # print(rating_dict)
+            # # Sauvegarde
+            # # feedback_df = pd.DataFrame(rating_dict, index=[0])
+            # # database.insert_dataframe_to_table(feedback_df, "app_detection_ratings", "dr_id", if_exists = 'append')
+            # st.success('Merci pour votre feedback !')
 
 
 elif source_radio == settings.VIDEO:
