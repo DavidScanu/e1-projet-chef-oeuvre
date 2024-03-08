@@ -11,18 +11,12 @@ maxUploadSize = 500
 # One of "light" or "dark".
 base = "light"
 
-# Primary accent color for interactive elements.
-# primaryColor = "#30f8ff"
+[runner]
 
-# Background color for the main content area.
-# backgroundColor = 
-
-# Background color used for the sidebar and most interactive widgets.
-# secondaryBackgroundColor = 
-
-# Color used for almost all text.
-# textColor =
-
-# Font family for all text in the app, except code blocks. One of "sans serif",
-# "serif", or "monospace".
-# font =
+# Handle script rerun requests immediately, rather than waiting for script
+# execution to reach a yield point. This makes Streamlit much more
+# responsive to user interaction, but it can lead to race conditions in
+# apps that mutate session_state data outside of explicit session_state
+# assignment statements.
+# Default: true
+fastReruns = true

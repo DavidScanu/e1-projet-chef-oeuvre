@@ -40,14 +40,23 @@ st.set_page_config(
 if 'data_erased' not in st.session_state:
     st.session_state.data_erased = False
 
+# Détection
+def on_change_uploader():
+    pass 
+    # st.session_state.new_dectection_job = True
+
 def on_click_detect_button():
     # st.session_state.new_detection_job = True
     st.session_state.data_erased = False
     st.session_state.rating = None
 
-def on_change_uploader():
-    pass 
-    # st.session_state.new_dectection_job = True
+
+# Rating
+if 'rating' not in st.session_state:
+    st.session_state['rating'] = None
+
+def on_click_rating(value):
+    st.session_state['rating'] = value
 
 
 # Main page heading
@@ -115,16 +124,22 @@ if source_radio == settings.IMAGE:
                 st.image(default_detected_image_path, caption='Exemple de détection',
                         use_column_width=True)
             else:
-                if st.sidebar.button('Lancer la détection',on_click=on_click_detect_button, use_container_width=True):
+                if st.sidebar.button('Lancer la détection', on_click=on_click_detect_button, use_container_width=True):
 
                     # Effectuer la prédiction
                     res = model.predict(uploaded_image, conf=confidence)
 
+                    # Tracer les résultats
+                    img_plotted = res[0].plot()[:, :, ::-1]
+                    # Afficher l'image avec les boîtes de détection
+                    st.image(img_plotted, caption='Image détectée', use_column_width=True)
+        
                     # Identifiant unique
                     detection_timezone = pytz.timezone('Europe/Paris')
                     detection_datetime = datetime.datetime.now(detection_timezone) 
                     UID = detection_datetime.strftime("%Y-%m-%d-%H%M%S")
 
+                    # IDs
                     job_id = uuid.uuid4()
                     og_id = uuid.uuid4()
                     dt_id = uuid.uuid4()
@@ -172,8 +187,6 @@ if source_radio == settings.IMAGE:
                     database.insert_dataframe_to_table(detected_img_df, "app_imgs_detected", "dt_id", if_exists = 'append')
                     # Sauvegarder le fichier de l'image détectée
                     res[0].save(filename=detected_img_dict['dt_filepath'])
-                    # Tracer les résultats
-                    img_plotted = res[0].plot()[:, :, ::-1]
 
                     # Table "app_detection_labels"
                     label_dict = {}
@@ -186,20 +199,14 @@ if source_radio == settings.IMAGE:
                     # Enregistre les prédictions dans un fichier txt.
                     res[0].save_txt(label_dict['label_filepath'])
 
-                    # Afficher l'image avec les boîtes de détection
-                    st.image(img_plotted, caption='Image détectée', use_column_width=True)
-        
+                    # Table "app_detection_boxes"
                     # Nom des classes détectées par le modèle
                     classes_dict = res[0].names
-
                     # Boîtes de détection
                     boxes = res[0].boxes
-
-                    # Table "app_detection_boxes"
                     for box in boxes:
                         box_numpy = box.numpy()
                         box_xywhn = box_numpy.xywhn.tolist()
-
                         box_dict = {}
                         box_dict['box_id'] = uuid.uuid4()
                         box_dict['box_class_id'] = int(box_numpy.cls.tolist()[0])
@@ -211,14 +218,13 @@ if source_radio == settings.IMAGE:
                         box_dict['box_conf'] = round(box_numpy.conf.tolist()[0], 4)
                         box_dict['box_label_id'] = label_id
                         box_dict['box_job_id'] = job_id
-
                         boxes_list.append(box_dict)
+                    # Sauvegarder les boîtes de détection
+                    boxes_df = pd.DataFrame(boxes_list)
+                    database.insert_dataframe_to_table(boxes_df, "app_detection_boxes", "box_id", if_exists = 'append')
+                    # Afficher les résultats 
 
         if boxes_list :
-            # Sauvegarder les boîtes de détection
-            boxes_df = pd.DataFrame(boxes_list)
-            database.insert_dataframe_to_table(boxes_df, "app_detection_boxes", "box_id", if_exists = 'append')
-            # Afficher les résultats 
             try:
                 with st.expander("📝 Résultats de détection"):
                     st.markdown(f"""
@@ -236,13 +242,26 @@ if source_radio == settings.IMAGE:
                 st.write("Aucune image n'a encore été téléchargée !")
 
 
-        # rating_dict = {}
-        # rating_dict['dr_id'] = uuid.uuid4()
-        # rating_dict['dr_rating'] = st.session_state.rating # stars
-        # rating_dict['dr_job_id'] = job_id
-        # Sauvegarde
-        # feedback_df = pd.DataFrame(rating_dict, index=[0])
-        # database.insert_dataframe_to_table(feedback_df, "app_detection_ratings", "dr_id", if_exists = 'append')
+            placeholder = st.empty()
+
+            with placeholder.container():
+                st.markdown("""
+                #### Rating
+                Notez la détection afin de nous aider à améliorer notre modèle !
+                """)
+                stars = st_star_rating('Rating', 5, 3, 20, read_only=False, on_click=on_click_rating, customCSS="h3 {display: none;}")
+
+            if isinstance(st.session_state['rating'], int) :
+                with placeholder.container():
+                    rating_dict = {}
+                    rating_dict['dr_id'] = uuid.uuid4()
+                    rating_dict['dr_rating'] = stars # stars
+                    rating_dict['dr_job_id'] = 100
+                    st.json(rating_dict)
+                    # Sauvegarde
+                    # feedback_df = pd.DataFrame(rating_dict, index=[0])
+                    # database.insert_dataframe_to_table(feedback_df, "app_detection_ratings", "dr_id", if_exists = 'append')
+                    st.success(f"Rating is : {st.session_state.rating}")
 
 
 elif source_radio == settings.VIDEO:
