@@ -40,20 +40,13 @@ st.set_page_config(
 if 'data_erased' not in st.session_state:
     st.session_state.data_erased = False
 
-# Détection
-def on_change_uploader():
-    pass 
-    # st.session_state.new_dectection_job = True
-
-def on_click_detect_button():
-    # st.session_state.new_detection_job = True
-    st.session_state.data_erased = False
-    st.session_state.rating = None
-
-
-# Rating
 if 'rating' not in st.session_state:
     st.session_state['rating'] = None
+
+
+def on_click_detect_button():
+    st.session_state.data_erased = False
+    st.session_state.rating = None
 
 def on_click_rating(value):
     st.session_state['rating'] = value
@@ -93,11 +86,15 @@ source_img = None
 # If image is selected
 if source_radio == settings.IMAGE:
     source_img = st.sidebar.file_uploader(
-        "Choisissez une image...", type=("jpg", "jpeg", "png", 'bmp', 'webp'), on_change=on_change_uploader)
+        "Choisissez une image...", type=("jpg", "jpeg", "png", 'bmp', 'webp'))
 
     with st.container(border=True):
 
-        boxes_list = []
+        boxes_dict_list = []
+
+        if boxes_dict_list : 
+            st.write('Hello')
+
         col1, col2 = st.columns(2)
 
         with col1:
@@ -204,6 +201,7 @@ if source_radio == settings.IMAGE:
                     classes_dict = res[0].names
                     # Boîtes de détection
                     boxes = res[0].boxes
+                    boxes_dict_list = []
                     for box in boxes:
                         box_numpy = box.numpy()
                         box_xywhn = box_numpy.xywhn.tolist()
@@ -218,13 +216,13 @@ if source_radio == settings.IMAGE:
                         box_dict['box_conf'] = round(box_numpy.conf.tolist()[0], 4)
                         box_dict['box_label_id'] = label_id
                         box_dict['box_job_id'] = job_id
-                        boxes_list.append(box_dict)
+                        boxes_dict_list.append(box_dict)
                     # Sauvegarder les boîtes de détection
-                    boxes_df = pd.DataFrame(boxes_list)
+                    boxes_df = pd.DataFrame(boxes_dict_list)
                     database.insert_dataframe_to_table(boxes_df, "app_detection_boxes", "box_id", if_exists = 'append')
                     # Afficher les résultats 
 
-        if boxes_list :
+        if boxes_dict_list :
             try:
                 with st.expander("📝 Résultats de détection"):
                     st.markdown(f"""
