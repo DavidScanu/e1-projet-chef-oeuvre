@@ -41,19 +41,14 @@ if 'data_erased' not in st.session_state:
     st.session_state.data_erased = False
 
 def on_click_detect_button():
+    # st.session_state.new_detection_job = True
     st.session_state.data_erased = False
+    st.session_state.rating = None
 
-# Ratings
-if 'rating' not in st.session_state:
-    st.session_state['rating'] = None
+def on_change_uploader():
+    pass 
+    # st.session_state.new_dectection_job = True
 
-if 'rating_read_only' not in st.session_state:
-    st.session_state['rating_read_only'] = False
-    
-def on_click_rating(value):
-    st.session_state['rating'] = {value}
-    st.session_state['rating_read_only'] = True
-    st.success(f"Merci pour votre évaluation ! {st.session_state['rating']}")
 
 # Main page heading
 st.header("👁️ Détection d'objets avec YOLOv8", divider="rainbow")
@@ -74,7 +69,6 @@ if model_type == 'Détection':
 elif model_type == 'Segmentation':
     model_path = Path(settings.SEGMENTATION_MODEL)
 
-
 # Load Pre-trained ML Model
 try:
     model = helper.load_model(model_path)
@@ -90,7 +84,7 @@ source_img = None
 # If image is selected
 if source_radio == settings.IMAGE:
     source_img = st.sidebar.file_uploader(
-        "Choisissez une image...", type=("jpg", "jpeg", "png", 'bmp', 'webp'))
+        "Choisissez une image...", type=("jpg", "jpeg", "png", 'bmp', 'webp'), on_change=on_change_uploader)
 
     with st.container(border=True):
 
@@ -221,11 +215,10 @@ if source_radio == settings.IMAGE:
                         boxes_list.append(box_dict)
 
         if boxes_list :
-
-            # Afficher les boxes sur la page "Détection"
+            # Sauvegarder les boîtes de détection
             boxes_df = pd.DataFrame(boxes_list)
             database.insert_dataframe_to_table(boxes_df, "app_detection_boxes", "box_id", if_exists = 'append')
-
+            # Afficher les résultats 
             try:
                 with st.expander("📝 Résultats de détection"):
                     st.markdown(f"""
@@ -243,27 +236,13 @@ if source_radio == settings.IMAGE:
                 st.write("Aucune image n'a encore été téléchargée !")
 
 
-
-
-
-
-    # Rating
-    st.markdown("""
-    #### Rating
-    Notez la détection afin de nous aider à améliorer notre modèle !
-    """)
-    rating = st_star_rating('Rating', 5, 3, 20, read_only=False, on_click=on_click_rating, customCSS="h3 {display: none;}")
-    st.write(st.session_state['rating_read_only'])
-
-            # rating_dict = {}
-            # rating_dict['dr_id'] = uuid.uuid4()
-            # rating_dict['dr_rating'] = st.session_state['rating'] # stars
-            # rating_dict['dr_job_id'] = job_id
-            # print(rating_dict)
-            # # Sauvegarde
-            # # feedback_df = pd.DataFrame(rating_dict, index=[0])
-            # # database.insert_dataframe_to_table(feedback_df, "app_detection_ratings", "dr_id", if_exists = 'append')
-            # st.success('Merci pour votre feedback !')
+        # rating_dict = {}
+        # rating_dict['dr_id'] = uuid.uuid4()
+        # rating_dict['dr_rating'] = st.session_state.rating # stars
+        # rating_dict['dr_job_id'] = job_id
+        # Sauvegarde
+        # feedback_df = pd.DataFrame(rating_dict, index=[0])
+        # database.insert_dataframe_to_table(feedback_df, "app_detection_ratings", "dr_id", if_exists = 'append')
 
 
 elif source_radio == settings.VIDEO:
