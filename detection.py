@@ -163,8 +163,10 @@ if source_radio == settings.IMAGE:
                     # Sauvegarde dans la table
                     detected_img_df = pd.DataFrame(detected_img_dict, index=[0])
                     database.insert_dataframe_to_table(detected_img_df, "app_imgs_detected", "dt_id", if_exists = 'append')
-                    # Tracer les résultats et sauvegarder le fichier de l'image détectée
-                    img_plotted = res[0].plot(save=True, filename=detected_img_dict['dt_filepath'])[:, :, ::-1]
+                    # Sauvegarder le fichier de l'image détectée
+                    res[0].save(filename=detected_img_dict['dt_filepath'])
+                    # Tracer les résultats
+                    img_plotted = res[0].plot()[:, :, ::-1]
 
                     # Table "app_detection_labels"
                     label_dict = {}

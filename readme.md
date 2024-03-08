@@ -100,7 +100,7 @@ VIDEOS_DICT = {
 
 | | Titre  | Solution  | URL |
 |---|---|---|---|
-| 1 | Problème d'importation d'Ultralytics au lancement de Streamlit (`streamlit run app.py`) dans un Codespace GitHub | `apt install libgl1-mesa-glx` | [Lien](https://stackoverflow.com/questions/55313610/importerror-libgl-so-1-cannot-open-shared-object-file-no-such-file-or-directo) |
+| 1 | Problème d'importation d'Ultralytics au lancement de Streamlit (`streamlit run app.py`) dans un Codespace GitHub | `sudo apt update` puis `sudo apt install libgl1-mesa-glx` | [Lien](https://stackoverflow.com/questions/55313610/importerror-libgl-so-1-cannot-open-shared-object-file-no-such-file-or-directo) |
 
 ## 🤖 Développement du modèle de détection et de suivi `Yolov8`
 
