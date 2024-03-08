@@ -52,6 +52,15 @@ def on_click_rating(value):
     st.session_state['rating'] = value
 
 
+if 'run' not in st.session_state:
+    st.session_state['run'] = 0
+
+print("-------")
+print(f"This is a run : {st.session_state['run']}")
+print("-------")
+
+st.session_state['run'] = st.session_state['run'] + 1
+
 # Main page heading
 st.header("👁️ Détection d'objets avec YOLOv8", divider="rainbow")
 
@@ -247,19 +256,20 @@ if source_radio == settings.IMAGE:
                 #### Rating
                 Notez la détection afin de nous aider à améliorer notre modèle !
                 """)
-                stars = st_star_rating('Rating', 5, 3, 20, read_only=False, on_click=on_click_rating, customCSS="h3 {display: none;}")
+                # stars = st_star_rating('Rating', 5, 3, 20, read_only=False, on_click=on_click_rating, customCSS="h3 {display: none;}")
+                stars = st_star_rating('Rating', 5, 3, 20, customCSS="h3 {display: none;}")
 
-            if isinstance(st.session_state['rating'], int) :
-                with placeholder.container():
-                    rating_dict = {}
-                    rating_dict['dr_id'] = uuid.uuid4()
-                    rating_dict['dr_rating'] = stars # stars
-                    rating_dict['dr_job_id'] = 100
-                    st.json(rating_dict)
-                    # Sauvegarde
-                    # feedback_df = pd.DataFrame(rating_dict, index=[0])
-                    # database.insert_dataframe_to_table(feedback_df, "app_detection_ratings", "dr_id", if_exists = 'append')
-                    st.success(f"Rating is : {st.session_state.rating}")
+            # if isinstance(st.session_state['rating'], int) :
+            #     with placeholder.container():
+            #         rating_dict = {}
+            #         rating_dict['dr_id'] = uuid.uuid4()
+            #         rating_dict['dr_rating'] = stars # stars
+            #         rating_dict['dr_job_id'] = 100
+            #         st.json(rating_dict)
+            #         # Sauvegarde
+            #         # feedback_df = pd.DataFrame(rating_dict, index=[0])
+            #         # database.insert_dataframe_to_table(feedback_df, "app_detection_ratings", "dr_id", if_exists = 'append')
+            #         st.success(f"Rating is : {st.session_state.rating}")
 
 
 elif source_radio == settings.VIDEO:
