@@ -112,6 +112,11 @@ else:
                 st.dataframe(detections_boxes_df[['box_class_name', 'box_class_id', 'box_conf', 'box_x_center', 'box_y_center', 'box_width', 'box_height']])
 
 
+            # Ajouter "Ratings" ici 
+            # Si le vote n'existe pas pour ce 'job_id' alors proposer le widget de vote
+            # Sinon afficher la note donnée
+            st.write(past_detections_df.loc[i, 'job_id'])
+
 if st.button('🗑️ Effacer les détections passées', type="primary", on_click=click_erase_button): 
     with st.spinner('Tâche en cours...'):
         database.erase_table("app_detection_jobs")
