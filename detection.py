@@ -40,26 +40,30 @@ st.set_page_config(
 if 'data_erased' not in st.session_state:
     st.session_state.data_erased = False
 
-if 'rating' not in st.session_state:
-    st.session_state['rating'] = None
+# if 'rating' not in st.session_state:
+#     st.session_state['rating'] = None
 
+if 'dr_job_id' not in st.session_state:
+    st.session_state['dr_job_id'] = None
 
 def on_click_detect_button():
     st.session_state.data_erased = False
-    st.session_state.rating = None
+    # st.session_state.rating = None
 
-def on_click_rating(value):
-    st.session_state['rating'] = value
+# def on_click_rating(value, **on_click_kwargs_dict):
+#     st.session_state['rating'] = value
+#     st.session_state['dr_job_id'] = on_click_kwargs_dict['dr_job_id']
 
 
-if 'run' not in st.session_state:
-    st.session_state['run'] = 0
+# if 'run' not in st.session_state:
+#     st.session_state['run'] = 0
 
-print("-------")
-print(f"This is a run : {st.session_state['run']}")
-print("-------")
+# print("-------")
+# print(f"This is a run : {st.session_state['run']}")
+# print("-------")
 
-st.session_state['run'] = st.session_state['run'] + 1
+# st.session_state['run'] = st.session_state['run'] + 1
+
 
 # Main page heading
 st.header("👁️ Détection d'objets avec YOLOv8", divider="rainbow")
@@ -132,6 +136,8 @@ if source_radio == settings.IMAGE:
             else:
                 if st.sidebar.button('Lancer la détection', on_click=on_click_detect_button, use_container_width=True):
 
+                    # Début du job de détection 
+
                     # Effectuer la prédiction
                     res = model.predict(uploaded_image, conf=confidence)
 
@@ -150,6 +156,9 @@ if source_radio == settings.IMAGE:
                     og_id = uuid.uuid4()
                     dt_id = uuid.uuid4()
                     label_id = uuid.uuid4()
+
+                    # Actualisation de l'état de la session (Session State)
+                    # st.session_state['job_id'] = job_id 
 
                     # Table "app_detection_jobs"
                     job_dict = {}
@@ -249,26 +258,30 @@ if source_radio == settings.IMAGE:
                 st.write("Aucune image n'a encore été téléchargée !")
 
 
-            placeholder = st.empty()
+            # placeholder = st.empty()
 
-            with placeholder.container():
-                st.markdown("""
-                #### Rating
-                Notez la détection afin de nous aider à améliorer notre modèle !
-                """)
-                # stars = st_star_rating('Rating', 5, 3, 20, read_only=False, on_click=on_click_rating, customCSS="h3 {display: none;}")
-                stars = st_star_rating('Rating', 5, 3, 20, customCSS="h3 {display: none;}")
+            # with placeholder.container():
+            # #     st.markdown("""
+            # #     #### Rating
+            # #     Notez la détection afin de nous aider à améliorer notre modèle !
+            # #     """)
+            #     on_click_kwargs_dict = {
+            #         'dr_job_id' : job_id,
+            #     }
+            #     # stars = st_star_rating("Please rate you experience", 5, 3, 20, key="rating_widget",  on_click=on_click_rating, on_click_kwargs=on_click_kwargs_dict)
+            #     stars = st.slider('Vote', 0, 5, step=1, key="rating_widget", on_change=on_click_rating, kwargs=on_click_kwargs_dict)
 
-            # if isinstance(st.session_state['rating'], int) :
+            # if st.session_state['rating_widget'] is not None :
             #     with placeholder.container():
             #         rating_dict = {}
             #         rating_dict['dr_id'] = uuid.uuid4()
-            #         rating_dict['dr_rating'] = stars # stars
-            #         rating_dict['dr_job_id'] = 100
-            #         st.json(rating_dict)
-            #         # Sauvegarde
-            #         # feedback_df = pd.DataFrame(rating_dict, index=[0])
-            #         # database.insert_dataframe_to_table(feedback_df, "app_detection_ratings", "dr_id", if_exists = 'append')
+            #         rating_dict['dr_rating'] = st.session_state['rating']
+            #         rating_dict['dr_job_id'] = st.session_state['dr_job_id']
+            #         # st.json(rating_dict)
+            #         # print(rating_dict)
+            # #         # Sauvegarde
+            # #         # feedback_df = pd.DataFrame(rating_dict, index=[0])
+            # #         # database.insert_dataframe_to_table(feedback_df, "app_detection_ratings", "dr_id", if_exists = 'append')
             #         st.success(f"Rating is : {st.session_state.rating}")
 
 
@@ -286,3 +299,7 @@ elif source_radio == settings.YOUTUBE:
 
 else:
     st.error("Veuillez sélectionner un type de source valide !")
+
+
+
+st.write(st.session_state)
