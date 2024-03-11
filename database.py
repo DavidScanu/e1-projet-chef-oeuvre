@@ -106,7 +106,7 @@ def if_table_exists(table_name):
         return False
     
 
-def drop_table(table_name):
+def drop_table(table_name: str):
     """
     Effacer une table. 
 
@@ -122,16 +122,14 @@ def drop_table(table_name):
             table.drop(engine)
             inspector = inspect(engine)
             if not table_name in inspector.get_table_names():
-                # st.success(f"Table {table_name} supprimée avec succès !")
                 print(f"Table {table_name} supprimée avec succès !")
-
         except Exception as e:
             raise Exception(f"Unexpected error: {e}") from e
     else :
         print(f"La table '{table_name}' que vous souhaitez supprimer n'existe pas.")
 
 
-def erase_table(table_name):
+def erase_table(table_name: str):
     """
     Effacer toutes les lignes d'une table. 
 

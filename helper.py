@@ -3,9 +3,10 @@ import time
 import streamlit as st
 import cv2
 from pytube import YouTube
+import os
 
 import settings
-
+import database
 
 def load_model(model_path):
     """
@@ -20,7 +21,6 @@ def load_model(model_path):
     model = YOLO(model_path)
     return model
 
-
 def display_tracker_options():
     display_tracker = st.radio("Display Tracker", ('Yes', 'No'))
     is_display_tracker = True if display_tracker == 'Yes' else False
@@ -28,7 +28,6 @@ def display_tracker_options():
         tracker_type = st.radio("Tracker", ("bytetrack.yaml", "botsort.yaml"))
         return is_display_tracker, tracker_type
     return is_display_tracker, None
-
 
 def _display_detected_frames(conf, model, st_frame, image, is_display_tracking=None, tracker=None):
     """
@@ -62,7 +61,6 @@ def _display_detected_frames(conf, model, st_frame, image, is_display_tracking=N
                    channels="BGR",
                    use_column_width=True
                    )
-
 
 def play_youtube_video(conf, model):
     """
@@ -105,7 +103,6 @@ def play_youtube_video(conf, model):
         except Exception as e:
             st.sidebar.error("Erreur de chargement de la vidéo : " + str(e))
 
-
 def play_rtsp_stream(conf, model):
     """
     Plays an rtsp stream. Detects Objects in real-time using the YOLOv8 object detection model.
@@ -147,7 +144,6 @@ def play_rtsp_stream(conf, model):
             vid_cap.release()
             st.sidebar.error("Erreur lors du chargement du flux RTSP : " + str(e))
 
-
 def play_webcam(conf, model):
     """
     Plays a webcam stream. Detects Objects in real-time using the YOLOv8 object detection model.
@@ -183,7 +179,6 @@ def play_webcam(conf, model):
                     break
         except Exception as e:
             st.sidebar.error("Erreur de chargement de la vidéo : " + str(e))
-
 
 def play_stored_video(conf, model):
     """
@@ -229,3 +224,94 @@ def play_stored_video(conf, model):
                     break
         except Exception as e:
             st.sidebar.error("Erreur de chargement de la vidéo : " + str(e))
+
+
+# DELETE
+            
+def delete_dir_files(directory_path):
+    for filename in os.listdir(directory_path):
+        if os.path.isfile(os.path.join(directory_path, filename)):
+            os.remove(os.path.join(directory_path, filename))
+    print(f"Suppression de tous les fichiers de '{directory_path}'.")
+
+def clear_past_detections_files(dir_path):
+    for root, sub_dir_names, files in os.walk(dir_path):
+        for sub_dir_name in sub_dir_names:
+            sub_dir_path = os.path.join(root, sub_dir_name)
+            if os.path.isdir(sub_dir_path):
+                for filename in os.listdir(sub_dir_path):
+                    filename_path = os.path.join(sub_dir_path, filename)
+                    if os.path.isfile(filename_path):
+                        os.remove(filename_path)
+                print(f"Suppression de tous les fichiers de '{sub_dir_path}'.")
+
+
+# DISPLAY
+                
+def display_detection_imgs(job_id):
+
+    # Requete jointe pour afficher les détections passées
+    job_query = f"""
+        SELECT * FROM app_detection_jobs
+        JOIN app_imgs_original
+        ON job_og_id = og_id
+        JOIN app_imgs_detected
+        ON job_dt_id = dt_id
+        WHERE job_id = '{job_id}';
+        """
+    job_df = database.sql_query_to_dataframe(job_query)
+    job_dict = job_df.to_dict('records')[0]
+
+    col1, col2 = st.columns(2)
+    with col1 : 
+        if os.path.isfile(job_dict['og_filepath']):
+            # st.subheader(job_dict['og_filename'])
+            st.image(job_dict['og_filepath'])
+    with col2 :
+        if os.path.isfile(job_dict['dt_filepath']):
+            # st.subheader(job_dict['dt_filename'])
+            st.image(job_dict['dt_filepath'])
+
+def display_detection_details(job_id):
+
+    # Job de détection
+    job_query = f"""
+        SELECT * FROM app_detection_jobs
+        JOIN app_imgs_original
+        ON job_og_id = og_id
+        JOIN app_imgs_detected
+        ON job_dt_id = dt_id
+        WHERE job_id = '{job_id}';
+        """
+    job_df = database.sql_query_to_dataframe(job_query)
+    job_dict = job_df.to_dict('records')[0]
+
+    # Detection Boxes
+    boxes_query = f"""
+        SELECT * FROM app_detection_boxes
+        WHERE box_job_id = '{job_id}';
+        """
+    boxes_df = database.sql_query_to_dataframe(boxes_query)
+
+    st.markdown(f"""
+        - **Modèle** : {job_dict['job_model_filename']}
+        - **Tâche** : {job_dict['job_task']}
+        - **Seuil de confiance** : {job_dict['job_confidence']}
+        - **Vitesse de détection** : {round(job_dict['job_speed'], 2)} ms
+        - **Nombre de boîtes de détection** : {len(boxes_df)}
+        - **Nombre de classes différentes** : {boxes_df['box_class_id'].nunique()}
+        - **Liste des classes détectées** : {boxes_df['box_class_name'].unique().tolist()}
+        - **Nom de l'image originale** : {job_dict['og_filename']}
+        - **Nom de l'image détectée** : {job_dict['dt_filename']}
+        - **Date de détection** : {job_dict['job_created_at'].strftime('%Y-%m-%d %X')}   
+    """)
+
+def display_detection_boxes(job_id):
+    # Detection Boxes
+    boxes_sql_query = f"""
+        SELECT * FROM app_detection_boxes
+        WHERE box_job_id = '{job_id}'
+        """
+    detections_boxes_df = database.sql_query_to_dataframe(boxes_sql_query)
+    st.markdown("""##### 📦 Boîtes de détection""")
+    st.dataframe(detections_boxes_df[['box_class_name', 'box_class_id', 'box_conf', 'box_x_center', 'box_y_center', 'box_width', 'box_height']])

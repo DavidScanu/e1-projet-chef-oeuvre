@@ -24,6 +24,14 @@ Voici quelques usages possibles pour l'application de détection et de suivi de 
 
 ## 💻 Application web 
 
+### TODO
+
+- Factoriser fonction d'affichage des boîtes de détection
+- Adapter l'application pour .png
+- Votes (ratings)
+- Page "Monitoring" (+ alertes emails)
+
+
 ### Fonctionnalités
 
 Cette application web de détection propose **la détection d’objets et le suivi d’instances à partir d'images, de vidéos ou d'URL YouTube**. Ses fonctionnalités principales comprennent :
