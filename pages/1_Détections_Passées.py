@@ -54,22 +54,19 @@ else:
     past_detections_df['job_created_at'] = past_detections_df['job_created_at'].dt.tz_convert(tz='Europe/Paris')
     # Trier par dates, les plus récents en premier
     past_detections_df.sort_values(by='job_created_at', ascending=False, inplace=True, ignore_index=True)
-
+    
     for i in range(len(past_detections_df)):
         with st.container(border=True):
-
             display_detection_imgs(job_id=past_detections_df.loc[i, 'job_id'])
-
             with st.expander("📝 Détails de la détection"):
                 # Détails de la détection
                 display_detection_details(job_id=past_detections_df.loc[i, 'job_id'])
                 # Boîtes de détection
                 display_detection_boxes(job_id=past_detections_df.loc[i, 'job_id'])
 
-            # Ajouter "Ratings" ici 
-            # Si le vote n'existe pas pour ce 'job_id' alors proposer le widget de vote
-            # Sinon afficher la note donnée
-
+        # Ajouter "Ratings" ici 
+        # Si le vote n'existe pas pour ce 'job_id' alors proposer le widget de vote
+        # Sinon afficher la note donnée
 
 
 # Effacer ou supprimer les détections passées
@@ -80,10 +77,6 @@ tables_list = [
     "app_detection_labels",
     "app_detection_boxes"
 ]
-
-for table in tables_list:
-    database.drop_table(table)
-clear_past_detections_files("detections")
 
 if st.button('🗑️ Effacer les détections passées', type="primary", on_click=click_erase_button): 
     with st.spinner('Tâche en cours...'):

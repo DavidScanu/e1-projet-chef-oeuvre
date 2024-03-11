@@ -4,6 +4,11 @@ import streamlit as st
 import cv2
 from pytube import YouTube
 import os
+import uuid
+import datetime
+import pytz
+import pandas as pd
+
 
 import settings
 import database
@@ -20,6 +25,128 @@ def load_model(model_path):
     """
     model = YOLO(model_path)
     return model
+
+def detection_job(uploaded_image, model, model_path, model_type, confidence):
+
+    # Table "app_users"
+    fake_user_dict = {
+        "user_id" : "davidscanu14@gmail.com",
+        "user_pw" : "fake_pw",
+        "user_name" : "David Scanu",
+        "user_role" : "admin"
+    }
+
+    # Effectuer la prédiction
+    res = model.predict(uploaded_image, conf=confidence)
+
+    # Tracer les résultats
+    # img_plotted = res[0].plot()[:, :, ::-1]
+    # Afficher l'image avec les boîtes de détection
+    # st.image(img_plotted, caption='Image détectée', use_column_width=True)
+
+    # Création des dossiers pour sauvegarder les images et les labels
+    if not os.path.exists('detections/imgs-original'):
+        os.makedirs(os.path.join("detections", "imgs-original"))
+    if not os.path.exists('detections/imgs-detected'):
+        os.makedirs(os.path.join("detections", "imgs-detected"))
+    if not os.path.exists('detections/labels'):
+        os.makedirs(os.path.join("detections", "labels"))
+
+    # Identifiant unique
+    detection_timezone = pytz.timezone('Europe/Paris')
+    detection_datetime = datetime.datetime.now(detection_timezone) 
+    UID = detection_datetime.strftime("%Y-%m-%d-%H%M%S")
+
+    # IDs
+    job_id = uuid.uuid4()
+    og_id = uuid.uuid4()
+    dt_id = uuid.uuid4()
+    label_id = uuid.uuid4()
+
+    # Actualisation de l'état de la session (Session State)
+    st.session_state['job_id'] = job_id
+
+    # Table "app_detection_jobs"
+    job_dict = {}
+    job_dict['job_id'] = job_id
+    job_dict['job_speed'] = float(sum(res[0].speed.values())) # vitesse de détection en ms
+    job_dict['job_confidence'] = confidence
+    job_dict['job_task'] = model_type
+    job_dict['job_count'] = len(res[0].boxes)
+    job_dict['job_model_filename'] = os.path.basename(str(model_path))
+    job_dict['job_model_weights_path'] = str(model_path)
+    # clés étrangères
+    job_dict['job_og_id'] = og_id
+    job_dict['job_dt_id'] = dt_id
+    job_dict['job_label_id'] = label_id
+    job_dict['job_user_id'] = fake_user_dict['user_id']
+    # Sauvegarde dans la table
+    job_df = pd.DataFrame(job_dict, index=[0])
+    job_df['job_created_at'] = pd.Timestamp.now(tz="Europe/Paris")
+    database.insert_dataframe_to_table(job_df, "app_detection_jobs", "job_id", if_exists = 'append')
+
+    # Table "app_imgs_original"
+    og_img_dict = {}
+    og_img_dict['og_id'] = og_id
+    og_img_dict['og_filename'] = f"{UID}-original.jpg"
+    og_img_dict['og_filepath'] = f"detections/imgs-original/{og_img_dict['og_filename']}"
+    og_img_dict['og_height'] = res[0].orig_shape[0]
+    og_img_dict['og_width'] = res[0].orig_shape[1]
+    # Sauvegarde dans la table
+    og_img_df = pd.DataFrame(og_img_dict, index=[0])
+    database.insert_dataframe_to_table(og_img_df, "app_imgs_original", "og_id", if_exists = 'append')
+    # Sauvegarder le fichier image
+    uploaded_image.save(og_img_dict['og_filepath'])
+
+    # Table "app_imgs_detected"
+    detected_img_dict = {}
+    detected_img_dict['dt_id'] = dt_id
+    detected_img_dict['dt_filename'] = f"{UID}-detected.jpg"
+    detected_img_dict['dt_filepath'] = f"detections/imgs-detected/{detected_img_dict['dt_filename']}"
+    # Sauvegarde dans la table
+    detected_img_df = pd.DataFrame(detected_img_dict, index=[0])
+    database.insert_dataframe_to_table(detected_img_df, "app_imgs_detected", "dt_id", if_exists = 'append')
+    # Sauvegarder le fichier de l'image détectée
+    res[0].save(filename=detected_img_dict['dt_filepath'])
+
+    # Table "app_detection_labels"
+    label_dict = {}
+    label_dict['label_id'] = label_id
+    label_dict['label_filename'] = f"{UID}.txt"
+    label_dict['label_filepath'] = f"detections/labels/{label_dict['label_filename']}"
+    # Sauvegarde dans la table
+    label_df = pd.DataFrame(label_dict, index=[0])
+    database.insert_dataframe_to_table(label_df, "app_detection_labels", "label_id", if_exists = 'append')
+    # Enregistre les prédictions dans un fichier txt.
+    res[0].save_txt(label_dict['label_filepath'])
+
+    # Table "app_detection_boxes"
+    # Nom des classes détectées par le modèle
+    classes_dict = res[0].names
+    # Boîtes de détection
+    boxes = res[0].boxes
+    boxes_dict_list = []
+    for box in boxes:
+        box_cpu = box.cpu()
+        box_numpy = box_cpu.numpy()
+        box_xywhn = box_numpy.xywhn.tolist()
+        box_dict = {}
+        box_dict['box_id'] = uuid.uuid4()
+        box_dict['box_class_id'] = int(box_numpy.cls.tolist()[0])
+        box_dict['box_class_name'] =  classes_dict[int(box_numpy.cls.tolist()[0])]
+        box_dict['box_x_center'] = box_xywhn[0][0]
+        box_dict['box_y_center'] = box_xywhn[0][1]
+        box_dict['box_width'] = box_xywhn[0][2]
+        box_dict['box_height'] = box_xywhn[0][3]
+        box_dict['box_conf'] = round(box_numpy.conf.tolist()[0], 4)
+        box_dict['box_label_id'] = label_id
+        box_dict['box_job_id'] = job_id
+        boxes_dict_list.append(box_dict)
+    # Sauvegarder les boîtes de détection
+    boxes_df = pd.DataFrame(boxes_dict_list)
+    database.insert_dataframe_to_table(boxes_df, "app_detection_boxes", "box_id", if_exists = 'append')
+
+    return job_id
 
 def display_tracker_options():
     display_tracker = st.radio("Display Tracker", ('Yes', 'No'))
