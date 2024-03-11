@@ -276,7 +276,8 @@ def display_detection_details(job_id):
 
     # Job de détection
     job_query = f"""
-        SELECT * FROM app_detection_jobs
+        SELECT *
+        FROM app_detection_jobs
         JOIN app_imgs_original
         ON job_og_id = og_id
         JOIN app_imgs_detected
