@@ -1,5 +1,7 @@
 [server]
 runOnSave = true
+enableXsrfProtection = false
+enableCORS = false
 
 # Max size, in megabytes, for files uploaded with the file_uploader.
 # Default: 200

@@ -105,9 +105,6 @@ if source_radio == settings.IMAGE:
 
         boxes_dict_list = []
 
-        if boxes_dict_list : 
-            st.write('Hello')
-
         col1, col2 = st.columns(2)
 
         with col1:
@@ -140,6 +137,14 @@ if source_radio == settings.IMAGE:
 
                     # Effectuer la prédiction
                     res = model.predict(uploaded_image, conf=confidence)
+
+                    # Création des dossiers pour sauvegarder les images et les labels
+                    if not os.path.exists('detections/imgs-original'):
+                        os.makedirs(os.path.join("detections", "imgs-original"))
+                    if not os.path.exists('detections/imgs-detected'):
+                        os.makedirs(os.path.join("detections", "imgs-detected"))
+                    if not os.path.exists('detections/labels'):
+                        os.makedirs(os.path.join("detections", "labels"))
 
                     # Tracer les résultats
                     img_plotted = res[0].plot()[:, :, ::-1]
@@ -221,7 +226,8 @@ if source_radio == settings.IMAGE:
                     boxes = res[0].boxes
                     boxes_dict_list = []
                     for box in boxes:
-                        box_numpy = box.numpy()
+                        box_cpu = box.cpu()
+                        box_numpy = box_cpu.numpy()
                         box_xywhn = box_numpy.xywhn.tolist()
                         box_dict = {}
                         box_dict['box_id'] = uuid.uuid4()
@@ -258,24 +264,24 @@ if source_radio == settings.IMAGE:
                 st.write("Aucune image n'a encore été téléchargée !")
 
 
-        placeholder = st.empty()
+        # placeholder = st.empty()
 
-        with placeholder.container():
-            stars = st_star_rating("Please rate you experience", 5, 3, 20, key="rating_widget")
-            if st.button('Submit'):
-                with placeholder.container():
-                    rating_dict = {}
-                    rating_dict['dr_id'] = uuid.uuid4()
-                    rating_dict['dr_rating'] = stars
-                    rating_dict['dr_job_id'] = 12345
-                    # st.json(rating_dict)
-                    print(rating_dict)
-                    st.success(f"Rating is : {stars}")
-                    st.success(f"job_id is : {rating_dict['dr_job_id']}")
+        # with placeholder.container():
+        #     stars = st_star_rating("Please rate you experience", 5, 3, 20, key="rating_widget")
+        #     if st.button('Submit'):
+        #         with placeholder.container():
+        #             rating_dict = {}
+        #             rating_dict['dr_id'] = uuid.uuid4()
+        #             rating_dict['dr_rating'] = stars
+        #             rating_dict['dr_job_id'] = 12345
+        #             # st.json(rating_dict)
+        #             print(rating_dict)
+        #             st.success(f"Rating is : {stars}")
+        #             st.success(f"job_id is : {rating_dict['dr_job_id']}")
 
-                    # Sauvegarde
-                    # feedback_df = pd.DataFrame(rating_dict, index=[0])
-                    # database.insert_dataframe_to_table(feedback_df, "app_detection_ratings", "dr_id", if_exists = 'append')
+        #             # Sauvegarde
+        #             # feedback_df = pd.DataFrame(rating_dict, index=[0])
+        #             # database.insert_dataframe_to_table(feedback_df, "app_detection_ratings", "dr_id", if_exists = 'append')
 
 
 elif source_radio == settings.VIDEO:
@@ -295,4 +301,4 @@ else:
 
 
 
-st.write(st.session_state)
+# st.write(st.session_state)

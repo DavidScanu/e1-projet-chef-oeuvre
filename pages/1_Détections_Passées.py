@@ -9,7 +9,6 @@ import pandas as pd
 import database
 from helper import delete_dir_files, clear_past_detections_files, display_detection_imgs, display_detection_details, display_detection_boxes
 
-
 # Setting page layout
 st.set_page_config(
     page_title="Détections passées",
@@ -81,6 +80,10 @@ tables_list = [
     "app_detection_labels",
     "app_detection_boxes"
 ]
+
+for table in tables_list:
+    database.drop_table(table)
+clear_past_detections_files("detections")
 
 if st.button('🗑️ Effacer les détections passées', type="primary", on_click=click_erase_button): 
     with st.spinner('Tâche en cours...'):

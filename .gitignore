@@ -1,6 +1,8 @@
 # Streamlit secrets
 secrets.toml
 
+detections/
+
 file_list.csv
 test-pagination.py
 notebook.ipynb
