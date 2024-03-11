@@ -138,6 +138,11 @@ if source_radio == settings.IMAGE:
                     # Effectuer la prédiction
                     res = model.predict(uploaded_image, conf=confidence)
 
+                    # Tracer les résultats
+                    img_plotted = res[0].plot()[:, :, ::-1]
+                    # Afficher l'image avec les boîtes de détection
+                    st.image(img_plotted, caption='Image détectée', use_column_width=True)
+        
                     # Création des dossiers pour sauvegarder les images et les labels
                     if not os.path.exists('detections/imgs-original'):
                         os.makedirs(os.path.join("detections", "imgs-original"))
@@ -146,11 +151,6 @@ if source_radio == settings.IMAGE:
                     if not os.path.exists('detections/labels'):
                         os.makedirs(os.path.join("detections", "labels"))
 
-                    # Tracer les résultats
-                    img_plotted = res[0].plot()[:, :, ::-1]
-                    # Afficher l'image avec les boîtes de détection
-                    st.image(img_plotted, caption='Image détectée', use_column_width=True)
-        
                     # Identifiant unique
                     detection_timezone = pytz.timezone('Europe/Paris')
                     detection_datetime = datetime.datetime.now(detection_timezone) 
@@ -244,7 +244,6 @@ if source_radio == settings.IMAGE:
                     # Sauvegarder les boîtes de détection
                     boxes_df = pd.DataFrame(boxes_dict_list)
                     database.insert_dataframe_to_table(boxes_df, "app_detection_boxes", "box_id", if_exists = 'append')
-                    # Afficher les résultats 
 
         if boxes_dict_list :
             try:
