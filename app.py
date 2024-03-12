@@ -117,43 +117,31 @@ if source_radio == settings.IMAGE:
 
         with st.container(border=True):
 
-            placeholder = st.empty()
+            col1, col2 = st.columns(2)
 
-            with placeholder.container():
-                col1, col2 = st.columns(2)
-                with col1:
-                    uploaded_image = PIL.Image.open(source_img)
-                    # Montrer l'image
-                    st.image(source_img, caption="Image originale",
-                            use_column_width=True) 
-                with col2:
-                    if st.sidebar.button('Lancer la détection', on_click=on_click_detect_button, use_container_width=True):
-                        with st.spinner('Détection en cours...'):
+            uploaded_image = PIL.Image.open(source_img)
+            # Montrer l'image
+            col1.image(source_img, caption="Image originale",
+                    use_column_width=True) 
 
+            if st.sidebar.button('Lancer la détection', on_click=on_click_detect_button, use_container_width=True):
 
-                            # L'affichage de la détecion et la sauvegarde 
-                            # mais mettre l'affichage AVANT la sauvegarde 
-                            # Actuellement, c'est l'inverse
+                # # Effectuer la prédiction
+                res = model.predict(uploaded_image, conf=confidence)
+                # # Tracer les résultats
+                img_plotted = res[0].plot()[:, :, ::-1]
+                # # Afficher l'image avec les boîtes de détection
+                col2.image(img_plotted, caption='Image détectée', use_column_width=True)
 
-                            # # Effectuer la prédiction
-                            # res = model.predict(uploaded_image, conf=confidence)
-                            # # Tracer les résultats
-                            # img_plotted = res[0].plot()[:, :, ::-1]
-                            # # Afficher l'image avec les boîtes de détection
-                            # st.image(img_plotted, caption='Image détectée', use_column_width=True)
+                with st.spinner('Sauvegarde de la détection...'):
 
-                            job_id = helper.detection_job(uploaded_image, model, model_path, model_type, confidence)
-
-                        with placeholder.container():
-
-
-
-                            helper.display_detection_imgs(job_id)
-                            with st.expander("📝 Résultats de détection"):
-                                # Détails de la détection
-                                helper.display_detection_details(job_id)
-                                # Boîtes de détection
-                                helper.display_detection_boxes(job_id)
+                    job_id = helper.detection_job(res, uploaded_image, model, model_path, model_type, confidence)
+                    
+                    with st.expander("📝 Résultats de détection"):
+                        # Détails de la détection
+                        helper.display_detection_details(job_id)
+                        # Boîtes de détection
+                        helper.display_detection_boxes(job_id)
             
 
         # placeholder = st.empty()

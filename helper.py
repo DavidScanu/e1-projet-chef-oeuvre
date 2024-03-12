@@ -26,7 +26,7 @@ def load_model(model_path):
     model = YOLO(model_path)
     return model
 
-def detection_job(uploaded_image, model, model_path, model_type, confidence):
+def detection_job(res, uploaded_image, model, model_path, model_type, confidence):
 
     # Table "app_users"
     fake_user_dict = {
@@ -37,7 +37,7 @@ def detection_job(uploaded_image, model, model_path, model_type, confidence):
     }
 
     # Effectuer la prédiction
-    res = model.predict(uploaded_image, conf=confidence)
+    # res = model.predict(uploaded_image, conf=confidence)
 
     # Tracer les résultats
     # img_plotted = res[0].plot()[:, :, ::-1]
