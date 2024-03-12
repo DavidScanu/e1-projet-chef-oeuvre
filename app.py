@@ -5,6 +5,7 @@ from pathlib import Path
 import PIL
 import os
 import uuid
+import time 
 
 # External packages
 import streamlit as st
@@ -90,7 +91,6 @@ if source_radio == settings.IMAGE:
     source_img = st.sidebar.file_uploader(
         "Choisissez une image...", type=("jpg", "jpeg", "png", 'bmp', 'webp'))
 
-
     if source_img is None:
 
         with st.container(border=True):
@@ -133,15 +133,15 @@ if source_radio == settings.IMAGE:
                 # # Afficher l'image avec les boîtes de détection
                 col2.image(img_plotted, caption='Image détectée', use_column_width=True)
 
-                with st.spinner('Sauvegarde de la détection...'):
+                # with st.spinner('Sauvegarde des informations de détection...'):
 
-                    job_id = helper.detection_job(res, uploaded_image, model, model_path, model_type, confidence)
-                    
-                    with st.expander("📝 Résultats de détection"):
-                        # Détails de la détection
-                        helper.display_detection_details(job_id)
-                        # Boîtes de détection
-                        helper.display_detection_boxes(job_id)
+                job_id = helper.detection_job(res, uploaded_image, model, model_path, model_type, confidence)
+                
+                with st.expander("📝 Résultats de détection"):
+                    # Détails de la détection
+                    helper.display_detection_details(job_id)
+                    # Boîtes de détection
+                    helper.display_detection_boxes(job_id)
             
 
         # placeholder = st.empty()
