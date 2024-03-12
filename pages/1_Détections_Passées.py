@@ -1,8 +1,10 @@
 # Python In-built packages
 import os
+import uuid
 
 # External packages
 import streamlit as st
+from streamlit_star_rating import st_star_rating
 import pandas as pd
 
 # Local Modules
@@ -24,11 +26,11 @@ st.header("🖼️ Détections passées", divider="rainbow")
 # Si la table existe
 if database.if_table_exists("app_detection_jobs"):
     # Requete jointe pour afficher les détections passées
-    sql_query = """
+    past_detections_query = """
         SELECT job_id, job_created_at
         FROM app_detection_jobs
         """
-    past_detections_df = database.sql_query_to_dataframe(sql_query)
+    past_detections_df = database.sql_query_to_dataframe(past_detections_query)
 else: 
     past_detections_df = pd.DataFrame() # DataFrame vide, évite l'erreur avec 'None'
 
@@ -56,18 +58,32 @@ else:
     past_detections_df.sort_values(by='job_created_at', ascending=False, inplace=True, ignore_index=True)
     
     for i in range(len(past_detections_df)):
+        
+        job_id = past_detections_df.loc[i, 'job_id']
+
         with st.container(border=True):
-            display_detection_imgs(job_id=past_detections_df.loc[i, 'job_id'])
+
+            display_detection_imgs(job_id=job_id)
+
             with st.expander("📝 Détails de la détection"):
                 # Détails de la détection
-                display_detection_details(job_id=past_detections_df.loc[i, 'job_id'])
+                display_detection_details(job_id=job_id)
                 # Boîtes de détection
-                display_detection_boxes(job_id=past_detections_df.loc[i, 'job_id'])
+                display_detection_boxes(job_id=job_id)
 
-        # Ajouter "Ratings" ici 
-        # Si le vote n'existe pas pour ce 'job_id' alors proposer le widget de vote
-        # Sinon afficher la note donnée
+            # Affichage des votes
+            rating_sql_query = f"""
+                SELECT *
+                FROM app_detection_ratings
+                WHERE dr_job_id = '{job_id}';
+                """
+            rating_df = database.sql_query_to_dataframe(rating_sql_query)
 
+            if not rating_df.empty: 
+                rating_dict = rating_df.to_dict(orient='records')
+                # st.dataframe(rating_df)
+                # st.write(rating_dict)
+                st.success(f"Merci d'avoir voté {rating_dict[0]['dr_rating']} étoiles pour cette détection !")
 
 # Effacer ou supprimer les détections passées
 tables_list = [

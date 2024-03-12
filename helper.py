@@ -112,7 +112,7 @@ def detection_job(res, uploaded_image, model, model_path, model_type, confidence
         res[0].save(filename=detected_img_dict['dt_filepath'])
 
         # Table "app_detection_labels"
-        st.write("Sauvegarde des fichiers '.txt'.")
+        st.write("Sauvegarde des lables au format '.txt'.")
         label_dict = {}
         label_dict['label_id'] = label_id
         label_dict['label_filename'] = f"{UID}.txt"
@@ -393,17 +393,19 @@ def display_detection_imgs(job_id):
         WHERE job_id = '{job_id}';
         """
     job_df = database.sql_query_to_dataframe(job_query)
-    job_dict = job_df.to_dict('records')[0]
+    
+    if not job_df.empty :
+        job_dict = job_df.to_dict('records')[0]
 
-    col1, col2 = st.columns(2)
-    with col1 : 
-        if os.path.isfile(job_dict['og_filepath']):
-            # st.subheader(job_dict['og_filename'])
-            st.image(job_dict['og_filepath'])
-    with col2 :
-        if os.path.isfile(job_dict['dt_filepath']):
-            # st.subheader(job_dict['dt_filename'])
-            st.image(job_dict['dt_filepath'])
+        col1, col2 = st.columns(2)
+        with col1 : 
+            if os.path.isfile(job_dict['og_filepath']):
+                # st.subheader(job_dict['og_filename'])
+                st.image(job_dict['og_filepath'])
+        with col2 :
+            if os.path.isfile(job_dict['dt_filepath']):
+                # st.subheader(job_dict['dt_filename'])
+                st.image(job_dict['dt_filepath'])
 
 def display_detection_details(job_id):
 
@@ -418,27 +420,27 @@ def display_detection_details(job_id):
         WHERE job_id = '{job_id}';
         """
     job_df = database.sql_query_to_dataframe(job_query)
-    job_dict = job_df.to_dict('records')[0]
-
-    # Detection Boxes
-    boxes_query = f"""
-        SELECT * FROM app_detection_boxes
-        WHERE box_job_id = '{job_id}';
-        """
-    boxes_df = database.sql_query_to_dataframe(boxes_query)
-
-    st.markdown(f"""
-        - **Modèle** : {job_dict['job_model_filename']}
-        - **Tâche** : {job_dict['job_task']}
-        - **Seuil de confiance** : {job_dict['job_confidence']}
-        - **Vitesse de détection** : {round(job_dict['job_speed'], 2)} ms
-        - **Nombre de boîtes de détection** : {len(boxes_df)}
-        - **Nombre de classes différentes** : {boxes_df['box_class_id'].nunique()}
-        - **Liste des classes détectées** : {boxes_df['box_class_name'].unique().tolist()}
-        - **Nom de l'image originale** : {job_dict['og_filename']}
-        - **Nom de l'image détectée** : {job_dict['dt_filename']}
-        - **Date de détection** : {job_dict['job_created_at'].strftime('%Y-%m-%d %X')}   
-    """)
+    if not job_df.empty:
+        job_dict = job_df.to_dict('records')[0]
+        # Detection Boxes
+        boxes_query = f"""
+            SELECT * FROM app_detection_boxes
+            WHERE box_job_id = '{job_id}';
+            """
+        boxes_df = database.sql_query_to_dataframe(boxes_query)
+        if not boxes_df.empty :
+            st.markdown(f"""
+                - **Modèle** : {job_dict['job_model_filename']}
+                - **Tâche** : {job_dict['job_task']}
+                - **Seuil de confiance** : {job_dict['job_confidence']}
+                - **Vitesse de détection** : {round(job_dict['job_speed'], 2)} ms
+                - **Nombre de boîtes de détection** : {len(boxes_df)}
+                - **Nombre de classes différentes** : {boxes_df['box_class_id'].nunique()}
+                - **Liste des classes détectées** : {boxes_df['box_class_name'].unique().tolist()}
+                - **Nom de l'image originale** : {job_dict['og_filename']}
+                - **Nom de l'image détectée** : {job_dict['dt_filename']}
+                - **Date de détection** : {job_dict['job_created_at'].strftime('%Y-%m-%d %X')}   
+            """)
 
 def display_detection_boxes(job_id):
     # Detection Boxes
@@ -447,5 +449,6 @@ def display_detection_boxes(job_id):
         WHERE box_job_id = '{job_id}'
         """
     detections_boxes_df = database.sql_query_to_dataframe(boxes_sql_query)
-    st.markdown("""##### 📦 Boîtes de détection""")
-    st.dataframe(detections_boxes_df[['box_class_name', 'box_class_id', 'box_conf', 'box_x_center', 'box_y_center', 'box_width', 'box_height']])
+    if not detections_boxes_df.empty:
+        st.markdown("""##### 📦 Boîtes de détection""")
+        st.dataframe(detections_boxes_df[['box_class_name', 'box_class_id', 'box_conf', 'box_x_center', 'box_y_center', 'box_width', 'box_height']])

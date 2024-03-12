@@ -145,27 +145,23 @@ if source_radio == settings.IMAGE:
                     # Boîtes de détection
                     helper.display_detection_boxes(job_id)
             
-            if st.session_state['job_id']:
-                placeholder = st.empty()
-
-                with placeholder.container():
-
-                    stars = st_star_rating("Notez cette détection !", 5, 3, 20, key="rating_widget")
-
-                    if st.button('Submit'):
-                        with placeholder.container():
-                            rating_dict = {}
-                            rating_dict['dr_id'] = uuid.uuid4()
-                            rating_dict['dr_rating'] = stars
-                            rating_dict['dr_job_id'] = st.session_state['job_id']
-                            # st.json(rating_dict)
-                            print(rating_dict)
-
-                            # Sauvegarde
-                            feedback_df = pd.DataFrame(rating_dict, index=[0])
-                            database.insert_dataframe_to_table(feedback_df, "app_detection_ratings", "dr_id", if_exists = 'append')
-                            st.success(f"Merci d'avoir voté {stars} étoiles pour cette détection !")
-                            # st.write(f"job_id is : {rating_dict['dr_job_id']}")
+            # if st.session_state['job_id']:
+            #     placeholder = st.empty()
+            #     with placeholder.container():
+            #         stars = st_star_rating("Notez cette détection !", 5, 3, 20, key="rating_widget")
+            #         if st.button('Submit'):
+            #             with placeholder.container():
+            #                 rating_dict = {}
+            #                 rating_dict['dr_id'] = uuid.uuid4()
+            #                 rating_dict['dr_rating'] = stars
+            #                 rating_dict['dr_job_id'] = st.session_state['job_id']
+            #                 # st.json(rating_dict)
+            #                 print(rating_dict)
+            #                 # Sauvegarde
+            #                 feedback_df = pd.DataFrame(rating_dict, index=[0])
+            #                 database.insert_dataframe_to_table(feedback_df, "app_detection_ratings", "dr_id", if_exists = 'append')
+            #                 st.success(f"Merci d'avoir voté {stars} étoiles pour cette détection !")
+            #                 # st.write(f"job_id is : {rating_dict['dr_job_id']}")
 
 
 elif source_radio == settings.VIDEO:
@@ -185,4 +181,4 @@ else:
 
 
 
-st.write(st.session_state)
+# st.write(st.session_state)
