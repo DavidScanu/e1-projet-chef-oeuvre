@@ -30,15 +30,15 @@ st.set_page_config(
 if 'data_erased' not in st.session_state:
     st.session_state.data_erased = False
 
-# if 'rating' not in st.session_state:
-#     st.session_state['rating'] = None
+def on_click_detect_button():
+    st.session_state.data_erased = False
 
 if 'job_id' not in st.session_state:
     st.session_state['job_id'] = None
 
-def on_click_detect_button():
-    st.session_state.data_erased = False
-    # st.session_state.detection_job = None
+def on_change_source_img():
+    st.session_state['job_id'] = None
+
 
 # def on_click_rating(value, **on_click_kwargs_dict):
 #     st.session_state['rating'] = value
@@ -89,7 +89,7 @@ source_img = None
 # If image is selected
 if source_radio == settings.IMAGE:
     source_img = st.sidebar.file_uploader(
-        "Choisissez une image...", type=("jpg", "jpeg", "png", 'bmp', 'webp'))
+        "Choisissez une image...", type=("jpg", "jpeg", "png", 'bmp', 'webp'), on_change=on_change_source_img)
 
     if source_img is None:
 
@@ -136,32 +136,36 @@ if source_radio == settings.IMAGE:
                 # with st.spinner('Sauvegarde des informations de détection...'):
 
                 job_id = helper.detection_job(res, uploaded_image, model, model_path, model_type, confidence)
-                
+                # Actualisation de l'état de la session (Session State)
+                st.session_state['job_id'] = job_id
+
                 with st.expander("📝 Résultats de détection"):
                     # Détails de la détection
                     helper.display_detection_details(job_id)
                     # Boîtes de détection
                     helper.display_detection_boxes(job_id)
             
+            if st.session_state['job_id']:
+                placeholder = st.empty()
 
-        # placeholder = st.empty()
+                with placeholder.container():
 
-        # with placeholder.container():
-        #     stars = st_star_rating("Please rate you experience", 5, 3, 20, key="rating_widget")
-        #     if st.button('Submit'):
-        #         with placeholder.container():
-        #             rating_dict = {}
-        #             rating_dict['dr_id'] = uuid.uuid4()
-        #             rating_dict['dr_rating'] = stars
-        #             rating_dict['dr_job_id'] = 12345
-        #             # st.json(rating_dict)
-        #             print(rating_dict)
-        #             st.success(f"Rating is : {stars}")
-        #             st.success(f"job_id is : {rating_dict['dr_job_id']}")
+                    stars = st_star_rating("Notez cette détection !", 5, 3, 20, key="rating_widget")
 
-        #             # Sauvegarde
-        #             # feedback_df = pd.DataFrame(rating_dict, index=[0])
-        #             # database.insert_dataframe_to_table(feedback_df, "app_detection_ratings", "dr_id", if_exists = 'append')
+                    if st.button('Submit'):
+                        with placeholder.container():
+                            rating_dict = {}
+                            rating_dict['dr_id'] = uuid.uuid4()
+                            rating_dict['dr_rating'] = stars
+                            rating_dict['dr_job_id'] = st.session_state['job_id']
+                            # st.json(rating_dict)
+                            print(rating_dict)
+
+                            # Sauvegarde
+                            feedback_df = pd.DataFrame(rating_dict, index=[0])
+                            database.insert_dataframe_to_table(feedback_df, "app_detection_ratings", "dr_id", if_exists = 'append')
+                            st.success(f"Merci d'avoir voté {stars} étoiles pour cette détection !")
+                            # st.write(f"job_id is : {rating_dict['dr_job_id']}")
 
 
 elif source_radio == settings.VIDEO:
@@ -181,4 +185,4 @@ else:
 
 
 
-# st.write(st.session_state)
+st.write(st.session_state)

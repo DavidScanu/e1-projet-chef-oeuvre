@@ -65,10 +65,6 @@ def detection_job(res, uploaded_image, model, model_path, model_type, confidence
         dt_id = uuid.uuid4()
         label_id = uuid.uuid4()
 
-        # Actualisation de l'état de la session (Session State)
-        st.session_state['job_id'] = job_id
-
-
         # Table "app_detection_jobs"
         st.write("Sauvegarde de la tâche de détection.")
         job_dict = {}
