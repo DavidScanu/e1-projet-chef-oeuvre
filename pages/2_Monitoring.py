@@ -1,5 +1,8 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
 
 import database
 
@@ -63,6 +66,7 @@ else:
     # - Histogramme nombre de détection chaque jour
     # - Histogramme moyenne de score des détections
     # - Histogramme détections par classes (ou camembert)
+
 
     # Définir des seuils d'alerte
     # Envoie automatisé
