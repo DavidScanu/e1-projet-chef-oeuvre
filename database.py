@@ -13,13 +13,14 @@ from sqlalchemy import delete
 
 # URL de la base de données, cachée dans un secret streamlit
 DB_PSY_URI = st.secrets.DB_PSY_URI
+# Connexion à la base de données
+engine = create_engine(DB_PSY_URI)
 
-# # 🔎 Inspect - Get Database Information
-# engine = create_engine(DB_PSY_URI)
-# inspector = inspect(engine)
-# # Get tables information
-# for table in inspector.get_table_names() :
-#     print(table)
+
+def get_tables():
+    inspector = inspect(engine)
+    return [table for table in inspector.get_table_names()]
+
 
 def insert_dataframe_to_table(df: pd.DataFrame, table_name:str, primary_key:str=None, if_exists='append'):
     """
@@ -31,7 +32,7 @@ def insert_dataframe_to_table(df: pd.DataFrame, table_name:str, primary_key:str=
         - primary_key : Colonne du DataFrame qui sera la clé primaire de la table.
         - if_exists : Comment se comporter si la table existe déjà. Par défaut, 'append' : insérer de nouvelles valeurs dans la table existante.
     """
-    engine = create_engine(DB_PSY_URI)
+    
     data_type = {
         'int64' : db.Integer(),
         'float64' : db.Float(),
@@ -73,7 +74,7 @@ def from_table_to_dataframe(table_name, parse_dates=None):
         - un DataFrame
     """
 
-    engine = create_engine(DB_PSY_URI)
+    
 
     try :
         with engine.connect() as conn:
@@ -90,7 +91,7 @@ def sql_query_to_dataframe(query: str):
     Args :
         - query : Requete SQL brute.
     """
-    engine = create_engine(DB_PSY_URI)
+    
     sql_query = text(query)
     with engine.connect() as conn:  
         df = pd.read_sql_query(sql_query, conn)
@@ -98,7 +99,7 @@ def sql_query_to_dataframe(query: str):
 
 
 def if_table_exists(table_name):
-    engine = create_engine(DB_PSY_URI)
+    
     inspector = inspect(engine)
     if inspector.has_table(table_name):
         return True
@@ -113,7 +114,7 @@ def drop_table(table_name: str):
     Args : 
         - table_name : Nom de la table.
     """
-    engine = create_engine(DB_PSY_URI)
+    
     if inspect(engine).has_table(table_name):
         try :
             metadata = MetaData()
@@ -136,7 +137,7 @@ def erase_table(table_name: str):
     Args : 
         - table_name : Nom de la table.
     """
-    engine = create_engine(DB_PSY_URI)
+    
     if inspect(engine).has_table(table_name):
         try :
             metadata = MetaData()
