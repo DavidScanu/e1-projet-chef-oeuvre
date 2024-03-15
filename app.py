@@ -128,9 +128,9 @@ if source_radio == settings.IMAGE:
 
                 # # Effectuer la prédiction
                 res = model.predict(uploaded_image, conf=confidence)
-                # # Tracer les résultats
+                # Tracer les résultats
                 img_plotted = res[0].plot()[:, :, ::-1]
-                # # Afficher l'image avec les boîtes de détection
+                # Afficher l'image avec les boîtes de détection
                 col2.image(img_plotted, caption='Image détectée', use_column_width=True)
 
                 # with st.spinner('Sauvegarde des informations de détection...'):
