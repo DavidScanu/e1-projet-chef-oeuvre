@@ -9,10 +9,10 @@ import datetime
 import pytz
 import pandas as pd
 
-
 import settings
 import database
 
+@st.cache_resource  # 👈 Add the caching decorator
 def load_model(model_path):
     """
     Loads a YOLO object detection model from the specified model_path.
@@ -359,7 +359,7 @@ def play_stored_video(conf, model):
             st.sidebar.error("Erreur de chargement de la vidéo : " + str(e))
 
 
-# DELETE
+# --- DELETE
             
 def delete_dir_files(directory_path):
     for filename in os.listdir(directory_path):
@@ -379,7 +379,7 @@ def clear_past_detections_files(dir_path):
                 print(f"Suppression de tous les fichiers de '{sub_dir_path}'.")
 
 
-# DISPLAY
+# --- DISPLAY
                 
 def display_detection_imgs(job_id):
 
