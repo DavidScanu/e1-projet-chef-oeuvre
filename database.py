@@ -26,6 +26,7 @@ def list_tables():
     for table in inspector.get_table_names() :
         print(table)
 
+
 def if_table_exists(table_name):
     inspector = inspect(engine)
     if inspector.has_table(table_name):

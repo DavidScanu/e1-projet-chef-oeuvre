@@ -1,0 +1,14 @@
+credentials:
+  usernames:
+    dscanu:
+      email: davidscanu14@gmail.com
+      logged_in: False # Will be managed automatically
+      name: David Scanu
+      password: abc # Will be hashed automatically  
+cookie:
+  expiry_days: 30
+  key: pfnrjfvocnekfk # Must be string
+  name: auth_cookie_streamlit
+preauthorized:
+  emails:
+  - davidscanu14@gmail.com
