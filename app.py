@@ -12,10 +12,6 @@ import streamlit as st
 from streamlit_star_rating import st_star_rating
 import pandas as pd
 
-# Local Modules
-import settings
-import helper
-import database
 
 # Setting page layout
 st.set_page_config(
@@ -25,6 +21,10 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Local Modules
+import settings
+import helper
+import database
 
 # Session state
 if 'data_erased' not in st.session_state:
