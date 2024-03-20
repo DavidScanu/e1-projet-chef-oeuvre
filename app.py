@@ -44,12 +44,16 @@ def on_change_source_img():
     st.session_state['job_id'] = None
 
 
-# --- Authentication file ---
+# --- Authentication ---
+    
+# Get credentials in Database, table 'app_users'
 with open('auth.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
 
-# get credentials in Database, table 'app_users'
-print("config credentials", config['credentials'])
+import json
+json_str = json.dumps(config['credentials'], indent=4)
+print(json_str)
+
 
 authenticator = stauth.Authenticate(
     config['credentials'],
