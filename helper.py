@@ -1,13 +1,17 @@
-from ultralytics import YOLO
 import time
-import streamlit as st
-import cv2
-from pytube import YouTube
 import os
 import uuid
 import datetime
 import pytz
+import yaml
+from yaml.loader import SafeLoader
+
 import pandas as pd
+import streamlit as st
+import streamlit_authenticator as stauth
+import cv2
+from pytube import YouTube
+from ultralytics import YOLO
 
 import settings
 import database
@@ -359,7 +363,7 @@ def play_stored_video(conf, model):
             st.sidebar.error("Erreur de chargement de la vidéo : " + str(e))
 
 
-# --- DELETE
+# --- DELETE ---
             
 def delete_dir_files(directory_path):
     for filename in os.listdir(directory_path):
@@ -379,7 +383,7 @@ def clear_past_detections_files(dir_path):
                 print(f"Suppression de tous les fichiers de '{sub_dir_path}'.")
 
 
-# --- DISPLAY
+# --- DISPLAY ---
                 
 def display_detection_imgs(job_id):
 
@@ -452,3 +456,41 @@ def display_detection_boxes(job_id):
     if not detections_boxes_df.empty:
         st.markdown("""##### 📦 Boîtes de détection""")
         st.dataframe(detections_boxes_df[['box_class_name', 'box_class_id', 'box_conf', 'box_x_center', 'box_y_center', 'box_width', 'box_height']])
+
+
+# --- Authentication ---
+        
+def authentification_main():
+    
+    # Get credentials in Database, table 'app_users'
+    with open('auth.yaml') as file:
+        config = yaml.load(file, Loader=SafeLoader)
+
+    import json
+    json_str = json.dumps(config['credentials'], indent=4)
+    print(json_str)
+
+    authenticator = stauth.Authenticate(
+        config['credentials'],
+        config['cookie']['name'],
+        config['cookie']['key'],
+        config['cookie']['expiry_days'],
+        config['preauthorized']
+    )
+
+    authenticator.login()
+
+    if st.session_state["authentication_status"]:
+
+        st.sidebar.subheader(f'Bienvenue {st.session_state["name"]} !')
+        authenticator.logout(key="logout-button", button_name="Se déconnecter", location="sidebar")
+
+    elif st.session_state["authentication_status"] is False:
+        st.error("Le nom d'utilisateur ou le mot de passe est incorrect.")
+
+    elif st.session_state["authentication_status"] is None:
+        st.warning("Veuillez entrer votre nom d'utilisateur et votre mot de passe.")
+
+    # Si l'utilisateur n'est pas identifié, ne pas afficher la suite de la page.
+    if not st.session_state["authentication_status"]: 
+        st.stop()

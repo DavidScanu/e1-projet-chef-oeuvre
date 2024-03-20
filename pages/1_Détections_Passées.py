@@ -4,7 +4,6 @@ import uuid
 
 # External packages
 import streamlit as st
-from streamlit_star_rating import st_star_rating
 import pandas as pd
 
 # Local Modules
@@ -22,6 +21,9 @@ st.set_page_config(
 # Main page heading
 st.header("🖼️ Détections passées", divider="rainbow")
 
+# --- Authentication ---
+from helper import authentification_main
+authentification_main()
 
 # Si la table existe
 if database.if_table_exists("app_detection_jobs"):
@@ -71,19 +73,19 @@ else:
                 # Boîtes de détection
                 display_detection_boxes(job_id=job_id)
 
-            # Affichage des votes
-            rating_sql_query = f"""
-                SELECT *
-                FROM app_detection_ratings
-                WHERE dr_job_id = '{job_id}';
-                """
-            rating_df = database.sql_query_to_dataframe(rating_sql_query)
+            # # Affichage des votes
+            # rating_sql_query = f"""
+            #     SELECT *
+            #     FROM app_detection_ratings
+            #     WHERE dr_job_id = '{job_id}';
+            #     """
+            # rating_df = database.sql_query_to_dataframe(rating_sql_query)
 
-            if not rating_df.empty: 
-                rating_dict = rating_df.to_dict(orient='records')
-                # st.dataframe(rating_df)
-                # st.write(rating_dict)
-                st.success(f"Merci d'avoir voté {rating_dict[0]['dr_rating']} étoiles pour cette détection !")
+            # if not rating_df.empty: 
+            #     rating_dict = rating_df.to_dict(orient='records')
+            #     # st.dataframe(rating_df)
+            #     # st.write(rating_dict)
+            #     st.success(f"Merci d'avoir voté {rating_dict[0]['dr_rating']} étoiles pour cette détection !")
 
 # Effacer ou supprimer les détections passées
 tables_list = [

@@ -3,7 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-
 import database
 
 
@@ -17,6 +16,10 @@ st.set_page_config(
 
 # Main page heading
 st.header("📊 Monitoring", divider="rainbow")
+
+# --- Authentication ---
+from helper import authentification_main
+authentification_main()
 
 # Si la table existe
 if database.if_table_exists("app_detection_jobs"):
